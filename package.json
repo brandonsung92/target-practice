@@ -1,0 +1,17 @@
+{
+  "name": "target-practice",
+  "version": "1.0.0",
+  "main": "main.js",
+  "dependencies": {
+    "electron": "^1.4.15",
+    "jquery": "^3.1.1",
+    "three": "^0.84.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brandon Sung",
+  "license": "ISC",
+  "description": ""
+}
