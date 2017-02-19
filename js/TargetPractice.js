@@ -9,10 +9,10 @@ const TargetPractice = function(browserProcess, settings) {
     let defaultSettings = {
         gameWidth: window.innerWidth,
         gameHeight: window.innerHeight,
-        sensitivity: 1.2, // 1.2 is same as 4 in OW
-        elevation: 185, // 76 in OW has 185cm height
-        movespeed: 550, // most heroes in OW have 5.5m/s movespeed
-        hfov: 103, // default OW hfov
+        sensitivity: 1,
+        elevation: 185,
+        movespeed: 550,
+        hfov: 103,
         targetDistance: 3000,
         targetWallScreenRatio: 0.4,
         targetColor: 0xFF0000,
