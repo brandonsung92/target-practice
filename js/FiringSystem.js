@@ -3,6 +3,10 @@ const EventHandler = require('./EventHandler.js');
 
 const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
 
+    this.dispose = function() {
+        this.eventHandler.removeListeners();
+    };
+
     this.fire = function() {
         let cantFire = !this.infiniteAmmo && this.reloading && this.inClip == 0;
         if (cantFire) return;
@@ -58,10 +62,6 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
             }
         ]);
         this.eventHandler.setupListeners(); 
-    };
-
-    this.removeListeners = function() {
-        this.eventHandler.removeListeners();
     };
 
     this.clipSize = clipSize;

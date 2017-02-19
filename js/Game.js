@@ -50,16 +50,10 @@ const Game = function(settings) {
     this.reset = function() {
         // keep reusing renderer
 
-        if (this.controls) this.controls.removeListeners();
-        if (this.firingSystem) this.firingSystem.removeListeners();
-
-        // remove objects from scene to prevent mem leaks
         this.clearScene();
-        this.scene = null;
-
-        // dispose objects to prevent mem leaks
         this.disposeObjects();
 
+        this.scene = null;
         this.targetSystem = null;
         this.firingSystem = null;
         this.controls = null;
@@ -109,6 +103,7 @@ const Game = function(settings) {
             this.settings.reloadDuration,
             afterFire
         );
+        this.disposableObjects.push(this.firingSystem);
     };
 
     this.setupTargetSystem = function() {
@@ -183,6 +178,7 @@ const Game = function(settings) {
             this.getSettings().movespeed
         );
         this.controls.addTo(this.scene);
+        this.disposableObjects.push(this.controls);
     };
 
     this.getSceneLength = function() {

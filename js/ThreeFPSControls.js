@@ -70,7 +70,7 @@ const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, mo
         this.eventHandler.setupListeners();
     };
 
-    this.removeListeners = function() {
+    this.dispose = function() {
         this.eventHandler.removeListeners();
     };
 
