@@ -203,7 +203,7 @@ const SettingsPage = function(settings, onDone) {
         this.fileHandler = new FileHandler();
         this.fileHandler.addFilter({name: 'JSON', extensions: ['json']});
         this.fileHandler.setWriteMethods(function() {
-            return JSON.stringify(this.settings);           
+            return JSON.stringify(this.form.getParsedValues());           
         }.bind(this));
         this.fileHandler.setReadMethods(function(data) {
             this.form.fillFields(JSON.parse(data));
