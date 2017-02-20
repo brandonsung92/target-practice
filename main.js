@@ -13,10 +13,11 @@ const createMainWindow = function() {
     const windowOptions = {
         width: workAreaSize.width,
         height: workAreaSize.height,
-        fullscreen: true
+        fullscreen: true,
+        frame: false
     }
     mainWindow = new BrowserWindow(windowOptions);
-    
+
     // dev only
     // mainWindow.openDevTools();
 
