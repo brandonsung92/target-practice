@@ -12,13 +12,9 @@ const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, mo
                 listener: function(event) {
                     let movementX = event.movementX || 0;
                     let movementY = event.movementY || 0;
-
-                    // camera.fov is vertical fov
-                    let vfov = this.camera.fov;
-                    let hfov = vfov * this.camera.aspect;
                     
-                    let pitchRotate = (movementY / this.gameHeight) * (vfov * Math.PI / 180);
-                    let yawRotate = (movementX / this.gameWidth) * (hfov * Math.PI / 180);
+                    let pitchRotate = movementY * this.vMultiplier;
+                    let yawRotate = movementX * this.hMultiplier;
 
                     this.pitchObject.rotation.x -= pitchRotate;
                     this.yawObject.rotation.y -= yawRotate;
@@ -135,13 +131,12 @@ const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, mo
         this.prevUpdateTime = time;
     }
 
-    this.gameWidth = gameWidth;
-    this.gameHeight = gameHeight;
-    this.camera = camera;
-    this.sensitivity = sensitivity;
     this.movespeed = movespeed;
 
-    this.camera.rotation.set(0, 0, 0);
+    this.vMultiplier = (sensitivity * camera.fov * Math.PI) / (180 * gameHeight);
+    this.hMultiplier = (sensitivity * camera.fov * camera.aspect * Math.PI) / (180 * gameWidth);
+
+    camera.rotation.set(0, 0, 0);
 
     this.eventListeners = [];
 
@@ -157,7 +152,7 @@ const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, mo
     this.pitchObject = new THREE.Object3D();
     this.yawObject = new THREE.Object3D();
 
-    this.pitchObject.add(this.camera);
+    this.pitchObject.add(camera);
     this.yawObject.add(this.pitchObject);
 
     this.setupListeners();
