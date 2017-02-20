@@ -13,8 +13,8 @@ const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, mo
                     let movementX = event.movementX || 0;
                     let movementY = event.movementY || 0;
                     
-                    let pitchRotate = movementY * this.vMultiplier;
-                    let yawRotate = movementX * this.hMultiplier;
+                    let pitchRotate = movementY * this.sensMultiplier;
+                    let yawRotate = movementX * this.sensMultiplier;
 
                     this.pitchObject.rotation.x -= pitchRotate;
                     this.yawObject.rotation.y -= yawRotate;
@@ -133,8 +133,9 @@ const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, mo
 
     this.movespeed = movespeed;
 
-    this.vMultiplier = (sensitivity * camera.fov * Math.PI) / (180 * gameHeight);
-    this.hMultiplier = (sensitivity * camera.fov * camera.aspect * Math.PI) / (180 * gameWidth);
+    var degreesPerDot = 0.022; // Multiplier used in CSGO
+
+    this.sensMultiplier = (degreesPerDot * sensitivity) * (Math.PI / 180);
 
     camera.rotation.set(0, 0, 0);
 
