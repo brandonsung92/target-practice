@@ -189,7 +189,7 @@ const Game = function(settings) {
     this.getSceneWidth = function() {
         let {hfov, targetWallScreenRatio, targetDistance} = this.getSettings();
 
-        let halfFovRad = hfov * Math.PI / 4;
+        let halfFovRad = hfov * Math.PI / 360;
         return Math.abs(Math.tan(halfFovRad) * targetDistance * 2 * targetWallScreenRatio);
     };
 
