@@ -10,10 +10,10 @@ const TargetPractice = function(browserProcess, settings) {
         gameWidth: window.innerWidth,
         gameHeight: window.innerHeight,
         sensitivity: 1,
-        elevation: 185,
+        elevation: 500,
         movespeed: 550,
         hfov: 103,
-        targetDistance: 3000,
+        targetDistance: 2500,
         targetWallScreenRatio: 0.4,
         targetColor: 0xFF0000,
         targetSize: 50,
@@ -23,8 +23,8 @@ const TargetPractice = function(browserProcess, settings) {
         clipSize: 0,
         rateOfFire: 8.8,
         reloadDuration: 500,
-        targetHitpoints: 5,
-        targetHealInterval: 500
+        targetHitpoints: 1,
+        targetHealInterval: 0
     };
 
     this.setState = function(state) {
