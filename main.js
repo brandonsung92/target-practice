@@ -19,7 +19,7 @@ const createMainWindow = function() {
     mainWindow = new BrowserWindow(windowOptions);
 
     // dev only
-    // mainWindow.openDevTools();
+    mainWindow.openDevTools();
 
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, MAIN_PATH),

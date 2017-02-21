@@ -2,6 +2,15 @@ const THREE = require('three');
 
 const TargetGenerator = function(scene, settings, targetWall) {
 
+    this.addToTimers = function(time) {
+        this.prevGenerateTime += time;
+        this.prevUpdateTime += time;
+
+        for (let i = 0; i < this.targets.length; i++) {
+            this.targets[i].lastHitTime += time;
+        }
+    };
+
     this.getStats = function() {
         return this.stats;
     };
@@ -55,7 +64,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
             object: object,
             velocity: velocity,
             hitpoints: targetHitpoints,
-            lastHit: performance.now()
+            lastHitTime: performance.now()
         };
 
         this.scene.add(target.object);
@@ -85,7 +94,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
             this.playHitSound();
             let target = this.targets[this.getTargetIndexByObject(hits[0].object)];
             target.hitpoints--;
-            target.lastHit = performance.now();
+            target.lastHitTime = performance.now();
 
             // Increment total number of hits
             this.stats.hits++;
@@ -138,7 +147,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
         let timePassed = (time - this.prevUpdateTime) / 1000;
 
         for (let i = 0; i < this.targets.length; i++) {
-            let {object, velocity, hitpoints, lastHit} = this.targets[i];
+            let {object, velocity, hitpoints, lastHitTime} = this.targets[i];
             if (this.settings.targetSpeed != 0) {
                 this.adjustVelocityOnCollision(object, velocity);
 
@@ -147,7 +156,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
             }
 
             let targetHealOn = this.settings.targetHealInterval != 0;
-            let healDue = time - lastHit > this.settings.targetHealInterval
+            let healDue = time - lastHitTime > this.settings.targetHealInterval
             if (targetHealOn && healDue) this.targets[i].hitpoints = this.settings.targetHitpoints;
 
             object.material.opacity = (1 * hitpoints / this.settings.targetHitpoints);

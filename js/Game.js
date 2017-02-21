@@ -8,6 +8,10 @@ const FiringControls = require('./controls/FiringControls.js');
 const FPSControls = require('./controls/ThreeFPSControls.js');
 
 const Game = function(settings) {
+    this.getStats = function() {
+        return this.targetSystem.getStats();
+    };
+
     this.setup = function() {
         // Needs resets:
         this.setupCharacterCollision();
@@ -72,6 +76,9 @@ const Game = function(settings) {
     };
 
     this.resume = function() {
+        let pausedTime = performance.now() - this.pauseTime;
+        this.adjustTimers(pausedTime);
+
         this.lockPointer();
         this.toggleControls(true);
         this.running = true;
@@ -79,15 +86,24 @@ const Game = function(settings) {
     };
 
     this.pause = function() {
+        this.pauseTime = performance.now();
+
         this.releasePointer();
         this.toggleControls(false);
         this.running = false;
     }
 
-    this.stop = function() {
+    this.end = function() {
         this.reset();
         this.releasePointer();
         this.running = false;
+    };
+
+    this.adjustTimers = function(pausedTime) {
+        this.controls.addToTimers(pausedTime);
+        this.firingControls.addToTimers(pausedTime);
+
+        this.targetSystem.addToTimers(pausedTime);
     };
 
     this.toggleControls = function(running) {

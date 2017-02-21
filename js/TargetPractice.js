@@ -2,6 +2,7 @@ const $ = require('jquery');
 const Game = require('./Game.js');
 const Menu = require('./Menu.js');
 const SettingsPage = require('./SettingsPage.js');
+const PausePage = require('./PausePage.js');
 const EventHandler = require('./tools/EventHandler.js');
 
 const TargetPractice = function(browserProcess, settings) {
@@ -45,7 +46,23 @@ const TargetPractice = function(browserProcess, settings) {
         this.game.setup();
         this.game.start();
         this.setState('running');
-    };
+    }.bind(this);
+
+    this.pauseGame = function() {
+        this.game.pause();
+        this.pausePage.updateStats(this.game.getStats());
+        this.setState('paused');
+    }.bind(this);
+
+    this.resumeGame = function() {
+        this.game.resume();
+        this.setState('running');
+    }.bind(this);
+
+    this.endGame = function() {
+        this.game.end();
+        this.setState('main_menu');
+    }.bind(this);
 
     let setupMainMenu = function() {
         let mainMenuOptions = {
@@ -54,9 +71,7 @@ const TargetPractice = function(browserProcess, settings) {
                 {
                     id: 'start',
                     text: 'Start',
-                    onClick: function() {
-                        this.startGame();
-                    }.bind(this)
+                    onClick: this.startGame
                 },
                 {
                     id: 'settings',
@@ -78,21 +93,27 @@ const TargetPractice = function(browserProcess, settings) {
         this.mainMenu = new Menu(mainMenuOptions);
     };
 
-    let setupGame = function() {
-        this.game = new Game(this.settings);
+    let setupPausePage = function() {
+        this.pausePage = new PausePage(this.resumeGame, this.endGame);
     };
 
     let setupSettingsPage = function() {
-        this.settingsPage = new SettingsPage(this.settings, function() {
+        let onDone = function() {
             this.setState('main_menu');
-        }.bind(this));
+        }.bind(this);
+        this.settingsPage = new SettingsPage(this.settings, onDone);
+    };
+
+    let setupGame = function() {
+        this.game = new Game(this.settings);
     };
 
     let setupElements = function() {
         this.$element = $("<div>").attr('id', 'target_practice');
         this.$element.append(this.mainMenu.$element);
-        this.$element.append(this.game.$element);
+        this.$element.append(this.pausePage.$element);
         this.$element.append(this.settingsPage.$element);
+        this.$element.append(this.game.$element);
     };
 
     let setupListeners = function() {
@@ -105,13 +126,10 @@ const TargetPractice = function(browserProcess, settings) {
                     if (e.keyCode == 27) { // escape
                         switch (this.state) {
                             case 'running':
-                                this.game.pause();
-                                this.setState('paused');
+                                this.pauseGame();
                                 break;
                             case 'paused':
-                                this.game.resume();
-                                this.setState('running');
-                            // do nothing for rest of states
+                                this.resumeGame();
                         }
                     }
                 }.bind(this)
@@ -126,6 +144,7 @@ const TargetPractice = function(browserProcess, settings) {
 
     setupMainMenu.call(this);
     setupGame.call(this);
+    setupPausePage.call(this);
     setupSettingsPage.call(this);
     setupElements.call(this);
     setupListeners.call(this);

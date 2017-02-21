@@ -3,6 +3,10 @@ const EventHandler = require('../tools/EventHandler.js');
 
 const ThreeFPSControls = function(camera, sensitivity, movespeed) {
 
+    this.addToTimers = function(time) {
+        this.prevUpdateTime += time;
+    };
+
     this.toggle = function(running) {
         this.running = running;
     };

@@ -2,6 +2,10 @@ const THREE = require('three');
 const EventHandler = require('../tools/EventHandler.js');
 
 const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
+    this.addToTimers = function(time) {
+        this.prevFireTime += time;
+        this.reloadTime += time;
+    };
 
     this.dispose = function() {
         this.eventHandler.removeListeners();
