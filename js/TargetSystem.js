@@ -2,8 +2,8 @@ const THREE = require('three');
 
 const TargetGenerator = function(scene, settings, targetWall) {
 
-    this.getRecord = function() {
-        return this.record;
+    this.getStats = function() {
+        return this.stats;
     };
 
     this.dispose = function() {
@@ -80,7 +80,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
         let hits = caster.intersectObjects(this.getTargetObjects());
 
         // Increment total number of attempts/shots
-        this.record.attempts++;
+        this.stats.attempts++;
 
         if (hits.length > 0) {
             this.playHitSound();
@@ -89,7 +89,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
             target.lastHit = performance.now();
 
             // Increment total number of hits
-            this.record.hits++;
+            this.stats.hits++;
             if (target.hitpoints === 0) this.removeTarget(target);
             return true;
         } else {
@@ -178,7 +178,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
     this.geometry = new THREE.CircleGeometry(this.settings.targetSize);
 
     this.targets = [];
-    this.record = {
+    this.stats = {
         hits: 0,
         attempts: 0
     };
