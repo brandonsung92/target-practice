@@ -3,7 +3,7 @@ const $ = require('jquery');
 
 const FPSControls = require('./ThreeFPSControls.js');
 const CollisionDetection = require('./CollisionDetection.js');
-const FiringSystem = require('./FiringSystem.js');
+const FiringControls = require('./FiringControls.js');
 const TargetSystem = require('./TargetSystem.js');
 
 const Game = function(settings) {
@@ -18,11 +18,23 @@ const Game = function(settings) {
         this.setupRenderer();
         this.setupCamera();
         this.setupControls();
-        this.setupFiringSystem();
+        this.setupFiringControls();
         this.setupTargetSystem();
 
         // Doesn't need resets:
         this.setupPosition();
+    };
+
+    this.reset = function() {
+        // keep reusing renderer
+
+        this.clearScene();
+        this.disposeObjects();
+
+        this.scene = null;
+        this.targetSystem = null;
+        this.firingControls = null;
+        this.controls = null;
     };
 
     this.clearScene = function() {
@@ -47,29 +59,43 @@ const Game = function(settings) {
         this.disposableObjects = [];
     };
 
-    this.reset = function() {
-        // keep reusing renderer
+    this.lockPointer = function() {
+        this.$element.get(0).requestPointerLock();
+    };
 
-        this.clearScene();
-        this.disposeObjects();
-
-        this.scene = null;
-        this.targetSystem = null;
-        this.firingSystem = null;
-        this.controls = null;
+    this.releasePointer = function() {
+        document.exitPointerLock();
     };
 
     this.start = function() {
         this.$element.append(this.renderer.domElement);
-        this.$element.get(0).requestPointerLock();;
+        this.lockPointer();
         this.running = true;
         this.animate();
     };
 
-    this.stop = function() {
-        document.exitPointerLock();
-        this.reset();
+    this.resume = function() {
+        this.lockPointer();
+        this.toggleControls(true);
+        this.running = true;
+        this.animate();
+    };
+
+    this.pause = function() {
+        this.releasePointer();
+        this.toggleControls(false);
         this.running = false;
+    }
+
+    this.stop = function() {
+        this.reset();
+        this.releasePointer();
+        this.running = false;
+    };
+
+    this.toggleControls = function(running) {
+        this.controls.toggle(running);
+        this.firingControls.toggle(running);
     };
 
     this.animate = function() {
@@ -81,13 +107,13 @@ const Game = function(settings) {
         this.targetSystem.generateTarget();
         this.targetSystem.updateTargets();
 
-        this.firingSystem.updateFireState();
-        this.firingSystem.updateReloadState();
+        this.firingControls.updateFireState();
+        this.firingControls.updateReloadState();
 
         this.renderer.render(this.scene, this.camera);
     }.bind(this);
 
-    this.setupFiringSystem = function() {
+    this.setupFiringControls = function() {
         let afterFire = function() {
             let position = this.controls.getPosition();
             let direction = this.controls.getDirection();
@@ -97,13 +123,13 @@ const Game = function(settings) {
             this.targetSystem.hitCheck(caster);
         }.bind(this);
 
-        this.firingSystem = new FiringSystem(
+        this.firingControls = new FiringControls(
             this.settings.clipSize,
             this.settings.rateOfFire,
             this.settings.reloadDuration,
             afterFire
         );
-        this.disposableObjects.push(this.firingSystem);
+        this.disposableObjects.push(this.firingControls);
     };
 
     this.setupTargetSystem = function() {

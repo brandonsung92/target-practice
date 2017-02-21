@@ -3,6 +3,10 @@ const EventHandler = require('./EventHandler.js');
 
 const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, movespeed) {
 
+    this.toggle = function(running) {
+        this.running = running;
+    };
+
     this.setupListeners = function() {
         if (!this.eventHandler) this.eventHandler = new EventHandler();
         this.eventHandler.setListeners([
@@ -10,6 +14,7 @@ const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, mo
                 type: 'mousemove',
                 element: document,
                 listener: function(event) {
+                    if (!this.running) return;
                     let movementX = event.movementX || 0;
                     let movementY = event.movementY || 0;
                     
@@ -155,6 +160,8 @@ const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, mo
 
     this.pitchObject.add(camera);
     this.yawObject.add(this.pitchObject);
+
+    this.running = true;
 
     this.setupListeners();
 };

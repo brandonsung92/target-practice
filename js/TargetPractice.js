@@ -106,14 +106,12 @@ const TargetPractice = function(browserProcess, settings) {
                     if (e.keyCode == 27) { // escape
                         switch (this.state) {
                             case 'running':
-                                // for now go to main menu
-                                // implement pausing later
-                                this.game.stop();
-                                this.setState('main_menu');
+                                this.game.pause();
+                                this.setState('paused');
                                 break;
                             case 'paused':
-                                // maybe unpause?
-                                break;
+                                this.game.resume();
+                                this.setState('running');
                             // do nothing for rest of states
                         }
                     }

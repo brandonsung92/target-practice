@@ -7,18 +7,25 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
         this.eventHandler.removeListeners();
     };
 
-    this.fire = function() {
+    this.toggle = function(running) {
+        this.running = running;
+    };
+
+    this.mousedown = function() {
+        if (!this.running) return;
+
         let cantFire = !this.infiniteAmmo && this.reloading && this.inClip == 0;
         if (cantFire) return;
         this.reloading = false;
         this.firing = true;
     }.bind(this);
 
-    this.reload = function() {
-        if (this.reloading) return;
+    this.mouseup = function() {
+        if (!this.running) return;
+
         // maybe run an on screen animation to show reloading later
         this.firing = false;
-        if (this.infiniteAmmo) return;
+        if (this.infiniteAmmo || this.inClip == this.clipSize) return;
         this.reloadTime = performance.now();
         this.reloading = true;
     }.bind(this);
@@ -53,12 +60,12 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
             {
                 type: 'mousedown',
                 element: document,
-                listener: this.fire
+                listener: this.mousedown
             },
             {
                 type: 'mouseup',
                 element: document,
-                listener: this.reload
+                listener: this.mouseup
             }
         ]);
         this.eventHandler.setupListeners(); 
@@ -74,6 +81,7 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
     this.prevFireTime = performance.now();
     this.inClip = clipSize;
     this.firing = false;
+    this.running = true;
 
     this.setupListeners();
 };
