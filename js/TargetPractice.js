@@ -43,7 +43,6 @@ const TargetPractice = function(browserProcess, settings) {
     };
 
     this.startGame = function() {
-        this.game.setup();
         this.game.start();
         this.setState('running');
     }.bind(this);

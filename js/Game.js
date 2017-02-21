@@ -69,6 +69,7 @@ const Game = function(settings) {
     };
 
     this.start = function() {
+        this.setup();
         this.lockPointer();
         this.running = true;
         this.animate();
