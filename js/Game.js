@@ -8,10 +8,6 @@ const FiringControls = require('./controls/FiringControls.js');
 const FPSControls = require('./controls/ThreeFPSControls.js');
 
 const Game = function(settings) {
-    this.getSettings = function() {
-        return this.settings;
-    };
-
     this.setup = function() {
         // Needs resets:
         this.setupCharacterCollision();
@@ -143,7 +139,7 @@ const Game = function(settings) {
     };
 
     this.setupPosition = function() {
-        let {elevation, movespeed} = this.getSettings();
+        let {elevation, movespeed} = this.settings;
         let positionZ = (this.getSceneLength() - movespeed) / 2;
         this.controls.setPosition(0, elevation, positionZ);
     };
@@ -154,7 +150,7 @@ const Game = function(settings) {
 
     this.setupRenderer = function() {
         if (this.renderer) return;
-        let {gameWidth, gameHeight} = this.getSettings();
+        let {gameWidth, gameHeight} = this.settings;
 
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setClearColor(0xffffff);
@@ -165,7 +161,7 @@ const Game = function(settings) {
     };
 
     this.setupCamera = function() {
-        let {gameWidth, gameHeight, hfov} = this.getSettings();
+        let {gameWidth, gameHeight, hfov} = this.settings;
         let aspect = gameWidth / gameHeight;
         let vfov = hfov / aspect;
         let far = Math.pow(this.getSceneLength(), 3);
@@ -200,26 +196,26 @@ const Game = function(settings) {
         this.controls = new FPSControls(
             this.camera,
             this.settings.sensitivity,
-            this.getSettings().movespeed
+            this.settings.movespeed
         );
         this.controls.addTo(this.scene);
         this.disposableObjects.push(this.controls);
     };
 
     this.getSceneLength = function() {
-        let {targetDistance, movespeed} = this.getSettings();
+        let {targetDistance, movespeed} = this.settings;
         return targetDistance + (movespeed / 2);
     };
 
     this.getSceneWidth = function() {
-        let {hfov, targetWallScreenRatio, targetDistance} = this.getSettings();
+        let {hfov, targetWallScreenRatio, targetDistance} = this.settings;
 
         let halfFovRad = hfov * Math.PI / 360;
         return Math.abs(Math.tan(halfFovRad) * targetDistance * 2 * targetWallScreenRatio);
     };
 
     this.getSceneHeight = function(sceneWidth) {
-        let {gameHeight, gameWidth} = this.getSettings();
+        let {gameHeight, gameWidth} = this.settings;
         sceneWidth = sceneWidth || this.getSceneWidth();
         return Math.abs(sceneWidth * (gameHeight / gameWidth));
     };
@@ -233,7 +229,7 @@ const Game = function(settings) {
         let sceneWidth = this.getSceneWidth();
         let sceneHeight = this.getSceneHeight(sceneWidth);
 
-        let {movespeed, elevation} = this.getSettings();
+        let {movespeed, elevation} = this.settings;
 
         let floorColor = 0xCCCCCC;
         let wallColor = 0xEEEEEE;
