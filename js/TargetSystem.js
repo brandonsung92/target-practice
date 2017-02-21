@@ -37,7 +37,6 @@ const TargetGenerator = function(scene, settings, targetWall) {
         let targetY = y - (usableHeight / 2) + (Math.random() * usableHeight);
         let targetZ = z + 10;
 
-
         let material = new THREE.MeshBasicMaterial({
             color: this.settings.targetColor,
             transparent: true
