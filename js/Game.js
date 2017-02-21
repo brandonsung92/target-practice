@@ -198,8 +198,6 @@ const Game = function(settings) {
 
     this.setupControls = function() {
         this.controls = new FPSControls(
-            this.settings.gameWidth,
-            this.settings.gameHeight,
             this.camera,
             this.settings.sensitivity,
             this.getSettings().movespeed

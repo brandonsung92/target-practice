@@ -1,7 +1,7 @@
 const THREE = require('three');
 const EventHandler = require('../tools/EventHandler.js');
 
-const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, movespeed) {
+const ThreeFPSControls = function(camera, sensitivity, movespeed) {
 
     this.toggle = function(running) {
         this.running = running;
@@ -138,13 +138,9 @@ const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, mo
 
     this.movespeed = movespeed;
 
-    var degreesPerDot = 0.022; // Multiplier used in CSGO
+    let degreesPerDot = 0.022; // Multiplier used in CSGO
 
     this.sensMultiplier = (degreesPerDot * sensitivity) * (Math.PI / 180);
-
-    camera.rotation.set(0, 0, 0);
-
-    this.eventListeners = [];
 
     this.moveState = {
         forward: false,
@@ -158,6 +154,7 @@ const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, mo
     this.pitchObject = new THREE.Object3D();
     this.yawObject = new THREE.Object3D();
 
+    camera.rotation.set(0, 0, 0);
     this.pitchObject.add(camera);
     this.yawObject.add(this.pitchObject);
 
