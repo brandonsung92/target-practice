@@ -36,10 +36,8 @@ FileHandler.prototype.showSaveDialog = function() {
 };
 
 FileHandler.prototype.readFn = function(filepath) {
-    if (!filepath[0]) {
-        this.onReadError();
-        return;
-    }
+    if (!filepath) return; // no file specified
+
     fs.readFile(filepath[0], 'utf-8', function(err, data) {
         if (err) {
             if (this.onReadError) this.onReadError(err);
@@ -54,10 +52,8 @@ FileHandler.prototype.readFn = function(filepath) {
 };
 
 FileHandler.prototype.writeFn = function(filepath) {
-    if (!filepath) {
-        this.onWriteError();
-        return;
-    }
+    if (!filepath) return; // no file specified
+
     fs.writeFile(filepath, this.getWriteContent(), function(err) {
         if (err) {
             if (this.onWriteError) this.onWriteError(err);

@@ -1,8 +1,7 @@
-
 const $ = require('jquery');
 const Menu = require('./Menu.js');
 const Form = require('./Form.js');
-const FileHandler = require('./FileHandler.js');
+const FileHandler = require('./tools/FileHandler.js');
 
 const SettingsPage = function(settings, onDone) {
     this.save = function() {

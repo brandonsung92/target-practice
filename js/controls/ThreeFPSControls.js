@@ -1,5 +1,5 @@
 const THREE = require('three');
-const EventHandler = require('./EventHandler.js');
+const EventHandler = require('../tools/EventHandler.js');
 
 const ThreeFPSControls = function(gameWidth, gameHeight, camera, sensitivity, movespeed) {
 

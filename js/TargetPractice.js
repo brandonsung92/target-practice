@@ -1,9 +1,8 @@
 const $ = require('jquery');
-const FileSystem = require('fs');
 const Game = require('./Game.js');
 const Menu = require('./Menu.js');
 const SettingsPage = require('./SettingsPage.js');
-const EventHandler = require('./EventHandler.js');
+const EventHandler = require('./tools/EventHandler.js');
 
 const TargetPractice = function(browserProcess, settings) {
     let defaultSettings = {

@@ -1,10 +1,11 @@
 const THREE = require('three');
 const $ = require('jquery');
 
-const FPSControls = require('./ThreeFPSControls.js');
 const CollisionDetection = require('./CollisionDetection.js');
-const FiringControls = require('./FiringControls.js');
 const TargetSystem = require('./TargetSystem.js');
+
+const FiringControls = require('./controls/FiringControls.js');
+const FPSControls = require('./controls/ThreeFPSControls.js');
 
 const Game = function(settings) {
     this.getSettings = function() {
