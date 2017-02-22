@@ -87,7 +87,7 @@ const SettingsPage = function(settings, onDone) {
             fields: [
                 {
                     dataId: 'sensitivity',
-                    label: 'Sensitivity',
+                    label: 'Sensitivity (CS:GO sensitivity)',
                     validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
                     parse: parseFloat
