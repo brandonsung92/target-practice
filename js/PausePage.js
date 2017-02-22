@@ -3,12 +3,14 @@ const Menu = require('./Menu.js');
 
 const PausePage = function(onResume, onEnd) {
     this.updateStats = function(rawStats) {
-        let {hits, attempts} = rawStats;
+        let {hits, attempts, targetsDestroyed} = rawStats;
         this.$statElements.hits.text('Hits: ' + hits);
         this.$statElements.attempts.text('Total Shots: ' + attempts);
 
         let accuracy = attempts == 0 ? 0 : Math.floor(hits / attempts * 100);
         this.$statElements.accuracy.text('Accuracy: ' + accuracy + '%');
+
+        this.$statElements.targetsDestroyed.text('Targets Destroyed: ' + targetsDestroyed);
     };
 
     let setupMenu = function(onResume, onEnd) {
@@ -38,10 +40,12 @@ const PausePage = function(onResume, onEnd) {
         this.$statElements.hits = $("<div>").addClass('stat');
         this.$statElements.attempts = $("<div>").addClass('stat');
         this.$statElements.accuracy = $("<div>").addClass('stat');
+        this.$statElements.targetsDestroyed = $("<div>").addClass('stat');
 
-        $content.append(this.$statElements.hits);
-        $content.append(this.$statElements.attempts);
-        $content.append(this.$statElements.accuracy);
+        for (let stat in this.$statElements) {
+            $content.append(this.$statElements[stat]);
+        }
+
         $content.append(this.menu.$element);
 
         this.$element.append($content);

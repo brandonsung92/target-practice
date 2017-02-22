@@ -98,7 +98,10 @@ const TargetGenerator = function(scene, settings, targetWall) {
 
             // Increment total number of hits
             this.stats.hits++;
-            if (target.hitpoints === 0) this.removeTarget(target);
+            if (target.hitpoints === 0) {
+                this.stats.targetsDestroyed++;
+                this.removeTarget(target);
+            }
             return true;
         } else {
             this.playMissSound();
@@ -188,7 +191,8 @@ const TargetGenerator = function(scene, settings, targetWall) {
     this.targets = [];
     this.stats = {
         hits: 0,
-        attempts: 0
+        attempts: 0,
+        targetsDestroyed: 0
     };
     this.prevGenerateTime = performance.now();
     this.prevUpdateTime = performance.now();
