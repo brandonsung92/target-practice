@@ -18,9 +18,8 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, $ammoInfo, a
     this.mousedown = function() {
         if (!this.running) return;
 
-        let cantFire = !this.infiniteAmmo && this.reloading && this.inClip == 0;
+        let cantFire = (!this.infiniteAmmo && (this.reloading || this.inClip)) == 0;
         if (cantFire) return;
-        this.reloading = false;
         this.firing = true;
     }.bind(this);
 
@@ -41,7 +40,7 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, $ammoInfo, a
     }
 
     this.updateFireState = function() {
-        if (!this.firing) return;
+        if (!this.firing || this.reloading) return;
 
         let time = performance.now();
 
