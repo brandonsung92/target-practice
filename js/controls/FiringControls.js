@@ -33,7 +33,7 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, $ammoInfo, a
     }.bind(this);
 
     this.reload = function() {
-        if (this.infiniteAmmo || this.reloading) return;
+        if (this.infiniteAmmo || this.reloading || this.firing) return;
         this.reloadTime = performance.now();
         this.reloading = true;
         this.updateAmmoInfoText();
