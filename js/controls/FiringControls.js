@@ -38,15 +38,21 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
         if (!this.firing) return;
 
         let time = performance.now();
-        if ((1 / this.rateOfFire) * 1000 > (time - this.prevFireTime)) return;
 
-        let noAmmo = !this.infiniteAmmo && this.inClip == 0;
-        if (noAmmo) return;
+        let shotDue = (time - this.prevFireTime) > ((1 / this.rateOfFire) * 1000);
+        if (shotDue) {
+            this.prevFireTime = time;
 
-        if (!this.infiniteAmmo) this.inClip--;
-        this.prevFireTime = time;
-
-        if (this.afterFire) this.afterFire();
+            let noAmmo = !this.infiniteAmmo && this.inClip == 0;
+            if (noAmmo) {
+                this.clipEmptySound.pause();
+                this.clipEmptySound.currentTime = 0;
+                this.clipEmptySound.play();
+            } else {
+                if (!this.infiniteAmmo) this.inClip--;
+                if (this.afterFire) this.afterFire();
+            }
+        }
     };
 
     this.updateReloadState = function() {
@@ -86,6 +92,8 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
     this.inClip = clipSize;
     this.firing = false;
     this.running = true;
+
+    this.clipEmptySound = new Audio('./sfx/clip_empty.wav');
 
     this.setupListeners();
 };
