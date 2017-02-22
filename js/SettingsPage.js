@@ -88,28 +88,28 @@ const SettingsPage = function(settings, onDone) {
                 {
                     dataId: 'sensitivity',
                     label: 'Sensitivity',
-                    validationInfo: 'Greater than 0',
+                    validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
                     parse: parseFloat
                 },
                 {
                     dataId: 'elevation',
                     label: 'Elevation (cm)',
-                    validationInfo: 'Greater than or equal to 0',
+                    validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
                     parse: parseFloat
                 },
                 {
                     dataId: 'movespeed',
                     label: 'Movespeed (cm/s)',
-                    validationInfo: 'Greater than or equal to 0',
+                    validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
                     parse: parseFloat
                 },
                 {
                     dataId: 'hfov',
                     label: 'Horizontal FoV (degrees)',
-                    validationInfo: 'Greater than 0. Less than 360',
+                    validationInfo: 'Greater than 0. Less than 360.',
                     validate: function(value) {
                         let v = parseFloat(value);
                         return (v > 0) && (v < 360);
@@ -119,70 +119,77 @@ const SettingsPage = function(settings, onDone) {
                 {
                     dataId: 'targetDistance',
                     label: 'Target Distance (cm)',
-                    validationInfo: 'Greater than 0',
+                    validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
                     parse: parseFloat
                 },
                 {
                     dataId: 'targetWallScreenRatio',
                     label: 'Target Wall Screen Ratio',
-                    validationInfo: 'Greater than 0',
+                    validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
                     parse: parseFloat
                 },
                 {
                     dataId: 'targetSize',
                     label: 'Target Radius (cm)',
-                    validationInfo: 'Greater than 0',
+                    validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
                     parse: parseFloat
                 },
                 {
                     dataId: 'targetInterval',
                     label: 'Target Interval (ms)',
-                    validationInfo: 'Greater than or equal to 0',
+                    validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
                     parse: parseFloat
                 },
                 {
                     dataId: 'maxTargets',
                     label: 'Max Targets',
-                    validationInfo: 'Greater than or equal to 1. Integer',
+                    validationInfo: 'Greater than or equal to 1. Integer.',
                     validate: integerGreaterThanOrEqualToOne,
                     parse: parseInt
                 },
                 {
                     dataId: 'targetSpeed',
                     label: 'Target Speed (cm/s)',
-                    validationInfo: 'Greater than or equal to 0',
+                    validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
                     parse: parseFloat
                 },
                 {
                     dataId: 'clipSize',
                     label: 'Clip Size (0 for unlimited)',
-                    validationInfo: 'Greater than or equal to 0. Integer',
+                    validationInfo: 'Greater than or equal to 0. Integer.',
                     validate: integerGreaterThanOrEqualToZero,
                     parse: parseInt
                 },
                 {
+                    dataId: 'reloadDuration',
+                    label: 'Reload Duration',
+                    validationInfo: 'Greater than or equal to 0.',
+                    validate: greaterThanOrEqualToZero,
+                    parse: parseFloat
+                },
+                {
                     dataId: 'rateOfFire',
                     label: 'Rate of Fire (shots per second)',
-                    validationInfo: 'Greater than or equal to 0',
+                    validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
                     parse: parseFloat
                 },
                 {
                     dataId: 'targetHitpoints',
                     label: 'Target Hit Points',
-                    validationInfo: 'Greater than or equal to 1. Integer',
+                    validationInfo: 'Greater than or equal to 1. Integer.',
                     validate: integerGreaterThanOrEqualToOne,
                     parse: parseInt
                 },
                 {
                     dataId: 'targetHealInterval',
                     label: 'Target Heal Interval After Hit (ms) (0 to turn off)',
-                    validationInfo: 'Greater than or equal to 0',
+                    validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
                     parse: parseFloat
                 }
