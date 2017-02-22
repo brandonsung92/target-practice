@@ -140,6 +140,7 @@ const Game = function(settings) {
             this.settings.clipSize,
             this.settings.rateOfFire,
             this.settings.reloadDuration,
+            this.$ammoInfo,
             afterFire
         );
         this.disposableObjects.push(this.firingControls);
@@ -321,10 +322,17 @@ const Game = function(settings) {
         this.disposableObjects.push(material, geometry);
     };
 
+    let setupElements = function() {
+        this.$element = $("<div>").attr('id', 'game');
+        this.$ammoInfo = $("<div>").attr('id','ammo_info');
+        this.$element.append(this.$ammoInfo);
+    };
+
     this.running = false;
     this.settings = settings;
     this.disposableObjects = [];
-    this.$element = $("<div>").attr('id', 'game');
+
+    setupElements.call(this);
 };
 
 module.exports = Game;

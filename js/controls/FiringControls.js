@@ -1,7 +1,7 @@
 const THREE = require('three');
 const EventHandler = require('../tools/EventHandler.js');
 
-const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
+const FiringSystem = function(clipSize, rateOfFire, reloadDuration, $ammoInfo, afterFire) {
     this.addToTimers = function(time) {
         this.prevFireTime += time;
         this.reloadTime += time;
@@ -25,14 +25,20 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
     }.bind(this);
 
     this.mouseup = function() {
+        this.firing = false;
         if (!this.running) return;
 
-        // maybe run an on screen animation to show reloading later
-        this.firing = false;
-        if (this.infiniteAmmo || this.inClip == this.clipSize) return;
+        if (!this.reloading && this.inClip == 0) {
+            this.reload();
+        }
+    }.bind(this);
+
+    this.reload = function() {
+        if (this.infiniteAmmo || this.reloading) return;
         this.reloadTime = performance.now();
         this.reloading = true;
-    }.bind(this);
+        this.updateAmmoInfoText();
+    }
 
     this.updateFireState = function() {
         if (!this.firing) return;
@@ -51,6 +57,7 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
             } else {
                 if (!this.infiniteAmmo) this.inClip--;
                 if (this.afterFire) this.afterFire();
+                this.updateAmmoInfoText();
             }
         }
     };
@@ -62,9 +69,26 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
         if ((time - this.reloadTime) < this.reloadDuration) return;
         this.inClip = this.clipSize;
         this.reloading = false;
+        this.updateAmmoInfoText();
     };
 
-    this.setupListeners = function() {
+    this.updateAmmoInfoText = function() {
+        if (!this.$ammoInfo) return;
+
+        let info = '';
+
+        if (!this.infiniteAmmo) {
+            if (this.reloading) {
+                info += 'Reloading...';
+            } else {
+                info += ' ' + this.inClip + ' / ' + this.clipSize;
+            }
+        }
+
+        this.$ammoInfo.text(info);
+    };
+
+    let setupListeners = function() {
         if (!this.eventHandler) this.eventHandler = new EventHandler();
         this.eventHandler.setListeners([
             {
@@ -76,6 +100,15 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
                 type: 'mouseup',
                 element: document,
                 listener: this.mouseup
+            },
+            {
+                type: 'keydown',
+                element: document,
+                listener: function(e) {
+                    if (e.keyCode == 82) { // 'r'
+                        this.reload();
+                    }
+                }.bind(this)
             }
         ]);
         this.eventHandler.setupListeners(); 
@@ -84,6 +117,7 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
     this.clipSize = clipSize;
     this.rateOfFire = rateOfFire;
     this.reloadDuration = reloadDuration;
+    this.$ammoInfo = $ammoInfo;
     this.afterFire = afterFire;
 
     this.infiniteAmmo = clipSize == 0;
@@ -95,7 +129,9 @@ const FiringSystem = function(clipSize, rateOfFire, reloadDuration, afterFire) {
 
     this.clipEmptySound = new Audio('./sfx/clip_empty.wav');
 
-    this.setupListeners();
+    this.updateAmmoInfoText();
+
+    setupListeners.call(this);
 };
 
 module.exports = FiringSystem;
