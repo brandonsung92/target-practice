@@ -95,17 +95,19 @@ const TargetGenerator = function(scene, settings, targetWall) {
         let hitMarkerObjs = this.getHitMarkerObjects();
         let targetIndex = -1;
 
-        // Remove hitMarkers from intersected
-        intersected = intersected.filter(function(item) {
-            return hitMarkerObjs.indexOf(item.object) == -1;
-        });
+        if (this.settings.hitMarkerDuration != 0) {
+            // Remove hitMarkers from intersected
+            intersected = intersected.filter(function(item) {
+                return hitMarkerObjs.indexOf(item.object) == -1;
+            });
+
+            if (intersected.length > 0) this.generateHitMarker(intersected[0].point);
+        }
 
         for (let i = 0; i < intersected.length; i++) {
             targetIndex = targetObjs.indexOf(intersected[i].object);
             if (targetIndex != -1) break;
         }
-
-        if (intersected.length > 0) this.generateHitMarker(intersected[0].point);
 
         // Increment total number of attempts/shots
         this.stats.attempts++;
@@ -208,6 +210,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
     };
 
     this.updateHitMarkers = function() {
+        if (this.settings.hitMarkerDuration == 0) return;
         let time = performance.now();
 
         while (this.hitMarkers.length > 0) {

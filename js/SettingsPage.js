@@ -192,6 +192,20 @@ const SettingsPage = function(settings, onDone) {
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
                     parse: parseFloat
+                },
+                {
+                    dataId: 'hitMarkerSize',
+                    label: 'Hit Marker Size',
+                    validationInfo: 'Greater than or equal to 0.',
+                    validate: greaterThanOrEqualToZero,
+                    parse: parseFloat
+                },
+                {
+                    dataId: 'hitMarkerDuration',
+                    label: 'Hit Marker Duration (ms) (0 to turn off)',
+                    validationInfo: 'Greater than or equal to 0.',
+                    validate: greaterThanOrEqualToZero,
+                    parse: parseFloat
                 }
             ]
         }
