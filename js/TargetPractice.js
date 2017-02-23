@@ -24,7 +24,9 @@ const TargetPractice = function(browserProcess, settings) {
         rateOfFire: 8.8,
         reloadDuration: 500,
         targetHitpoints: 1,
-        targetHealInterval: 0
+        targetHealInterval: 0,
+        hitMarkerDuration: 1000,
+        hitMarkerSize: 3
     };
 
     this.setState = function(state) {

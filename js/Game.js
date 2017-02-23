@@ -119,6 +119,7 @@ const Game = function(settings) {
 
         this.targetSystem.generateTarget();
         this.targetSystem.updateTargets();
+        this.targetSystem.updateHitMarkers();
 
         this.firingControls.updateFireState();
         this.firingControls.updateReloadState();
