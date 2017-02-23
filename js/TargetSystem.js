@@ -90,17 +90,15 @@ const TargetGenerator = function(scene, settings, targetWall) {
     };
 
     this.hitCheck = function(caster) {
-        let intersected = caster.intersectObjects(this.scene.children);
         let targetObjs = this.getTargetObjects();
-        let hitMarkerObjs = this.getHitMarkerObjects();
+
+        let intersectObjects = targetObjs.slice();
+        intersectObjects.push(this.targetWall);
+
+        let intersected = caster.intersectObjects(intersectObjects);
         let targetIndex = -1;
 
         if (this.settings.hitMarkerDuration != 0) {
-            // Remove hitMarkers from intersected
-            intersected = intersected.filter(function(item) {
-                return hitMarkerObjs.indexOf(item.object) == -1;
-            });
-
             if (intersected.length > 0) this.generateHitMarker(intersected[0].point);
         }
 

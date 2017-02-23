@@ -25,7 +25,7 @@ const TargetPractice = function(browserProcess, settings) {
         reloadDuration: 500,
         targetHitpoints: 1,
         targetHealInterval: 0,
-        hitMarkerSize: 3,
+        hitMarkerSize: 25,
         hitMarkerDuration: 1000
     };
 
