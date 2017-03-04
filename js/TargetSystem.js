@@ -9,6 +9,10 @@ const TargetGenerator = function(scene, settings, targetWall) {
         for (let i = 0; i < this.targets.length; i++) {
             this.targets[i].lastHitTime += time;
         }
+
+        for (let i = 0; i < this.hitMarkers.length; i++) {
+            this.hitMarkers[i].generateTime += time;
+        }
     };
 
     this.getStats = function() {
@@ -75,6 +79,8 @@ const TargetGenerator = function(scene, settings, targetWall) {
         this.scene.add(target.object);
         this.targets.push(target);
         this.prevGenerateTime = time;
+
+        this.stats.targetsGenerated++;
     };
 
     this.playHitSound = function() {
@@ -118,6 +124,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
 
             // Increment total number of hits
             this.stats.hits++;
+            this.stats.currentHitStreak++;
 
             if (target.hitpoints == 0) {
                 this.stats.targetsDestroyed++;
@@ -126,6 +133,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
             return true;
         } else {
             this.playMissSound();
+            this.stats.currentHitStreak = 0;
             return false;
         }
     };
@@ -256,7 +264,9 @@ const TargetGenerator = function(scene, settings, targetWall) {
     this.stats = {
         hits: 0,
         attempts: 0,
-        targetsDestroyed: 0
+        targetsDestroyed: 0,
+        targetsGenerated: 0,
+        currentHitStreak: 0
     };
     this.prevGenerateTime = performance.now();
     this.prevUpdateTime = performance.now();

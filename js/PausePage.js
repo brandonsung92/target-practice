@@ -3,7 +3,13 @@ const Menu = require('./Menu.js');
 
 const PausePage = function(onResume, onEnd) {
     this.updateStats = function(rawStats) {
-        let {hits, attempts, targetsDestroyed} = rawStats;
+        let {
+            hits,
+            attempts,
+            targetsDestroyed,
+            targetsGenerated,
+            currentHitStreak
+        } = rawStats;
         this.$statElements.hits.text('Hits: ' + hits);
         this.$statElements.attempts.text('Total Shots: ' + attempts);
 
@@ -11,6 +17,9 @@ const PausePage = function(onResume, onEnd) {
         this.$statElements.accuracy.text('Accuracy: ' + accuracy + '%');
 
         this.$statElements.targetsDestroyed.text('Targets Destroyed: ' + targetsDestroyed);
+        this.$statElements.targetsGenerated.text('Targets Generated: ' + targetsGenerated);
+        this.$statElements.currentHitStreak.text('Hit Streak: ' + currentHitStreak);
+
     };
 
     let setupMenu = function(onResume, onEnd) {
@@ -41,6 +50,8 @@ const PausePage = function(onResume, onEnd) {
         this.$statElements.attempts = $("<div>").addClass('stat');
         this.$statElements.accuracy = $("<div>").addClass('stat');
         this.$statElements.targetsDestroyed = $("<div>").addClass('stat');
+        this.$statElements.targetsGenerated = $("<div>").addClass('stat');
+        this.$statElements.currentHitStreak = $("<div>").addClass('stat');
 
         for (let stat in this.$statElements) {
             $content.append(this.$statElements[stat]);
