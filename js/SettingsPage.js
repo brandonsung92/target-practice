@@ -194,6 +194,13 @@ const SettingsPage = function(settings, onDone) {
                     parse: parseFloat
                 },
                 {
+                    dataId: 'targetLifespan',
+                    label: 'Target Lifespan (ms) (0 for infinite)',
+                    validationInfo: 'Greater than or equal to 0.',
+                    validate: greaterThanOrEqualToZero,
+                    parse: parseFloat
+                },
+                {
                     dataId: 'hitMarkerSize',
                     label: 'Hit Marker Size',
                     validationInfo: 'Greater than or equal to 0.',

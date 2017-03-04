@@ -8,6 +8,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
 
         for (let i = 0; i < this.targets.length; i++) {
             this.targets[i].lastHitTime += time;
+            this.targets[i].generateTime += time;
         }
 
         for (let i = 0; i < this.hitMarkers.length; i++) {
@@ -73,7 +74,8 @@ const TargetGenerator = function(scene, settings, targetWall) {
             object: object,
             velocity: velocity,
             hitpoints: targetHitpoints,
-            lastHitTime: performance.now()
+            lastHitTime: performance.now(),
+            generateTime: performance.now()
         };
 
         this.scene.add(target.object);
@@ -197,7 +199,12 @@ const TargetGenerator = function(scene, settings, targetWall) {
         let timePassed = (time - this.prevUpdateTime) / 1000;
 
         for (let i = 0; i < this.targets.length; i++) {
-            let {object, velocity, hitpoints, lastHitTime} = this.targets[i];
+            let {object, velocity, hitpoints, lastHitTime, generateTime} = this.targets[i];
+            if (this.settings.targetLifespan != 0) {
+                if (time - generateTime > this.settings.targetLifespan) this.removeTarget(this.targets[i]);
+                continue;
+            }
+
             if (this.settings.targetSpeed != 0) {
                 this.adjustVelocityOnCollision(object, velocity);
 
