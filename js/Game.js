@@ -13,7 +13,6 @@ const Game = function(settings) {
     };
 
     this.setup = function() {
-        // Needs resets:
         this.setupCharacterCollision();
         this.setupScene();
         this.setupRenderer();
@@ -21,14 +20,10 @@ const Game = function(settings) {
         this.setupControls();
         this.setupFiringControls();
         this.setupTargetSystem();
-
-        // Doesn't need resets:
         this.setupPosition();
     };
 
     this.reset = function() {
-        // keep reusing renderer
-
         this.clearScene();
         this.disposeObjects();
 
