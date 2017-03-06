@@ -13,22 +13,22 @@ const TargetPractice = function(browserProcess, settings) {
         sensitivity: 1,
         elevation: 600,
         movespeed: 550,
+        clipSize: 0,
+        reloadDuration: 500,
+        rateOfFire: 8.8,
         hfov: 103,
         targetDistance: 2500,
         targetWallScreenRatio: 0.3,
+        hitMarkerSize: 25,
+        hitMarkerDuration: 1000,
         targetSize: 50,
         targetInterval: 500,
-        targetDirectionChangeInterval: 0,
         maxTargets: 5,
         targetSpeed: 0,
-        clipSize: 0,
-        rateOfFire: 8.8,
-        reloadDuration: 500,
+        targetDirectionChangeInterval: 0,
         targetHitpoints: 1,
         targetHealInterval: 0,
-        targetLifespan: 3000,
-        hitMarkerSize: 25,
-        hitMarkerDuration: 1000
+        targetLifespan: 3000
     };
 
     this.setState = function(state) {
