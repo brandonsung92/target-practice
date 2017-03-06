@@ -159,6 +159,13 @@ const SettingsPage = function(settings, onDone) {
                     parse: parseFloat
                 },
                 {
+                    dataId: 'targetDirectionChangeInterval',
+                    label: 'Time between target direction change (0 to turn off)',
+                    validationInfo: 'Greater than or equal to 0.',
+                    validate: greaterThanOrEqualToZero,
+                    parse: parseFloat
+                },
+                {
                     dataId: 'clipSize',
                     label: 'Clip Size (0 for unlimited)',
                     validationInfo: 'Greater than or equal to 0. Integer.',
