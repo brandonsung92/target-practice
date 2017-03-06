@@ -84,13 +84,21 @@ const SettingsPage = function(settings, onDone) {
                 this.menu.disableButton('save', !valid);
                 this.menu.disableButton('saveToFile', !valid);
             }.bind(this),
-            groups: ['environment', 'character', 'targets'],
+            groups: ['character', 'environment', 'targets'],
             fields: [
                 {
                     dataId: 'sensitivity',
                     label: 'Sensitivity (CS:GO sensitivity)',
                     validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
+                    parse: parseFloat,
+                    group: 'character'
+                },
+                {
+                    dataId: 'movespeed',
+                    label: 'Movespeed (cm/s)',
+                    validationInfo: 'Greater than or equal to 0.',
+                    validate: greaterThanOrEqualToZero,
                     parse: parseFloat,
                     group: 'character'
                 },
@@ -103,8 +111,24 @@ const SettingsPage = function(settings, onDone) {
                     group: 'character'
                 },
                 {
-                    dataId: 'movespeed',
-                    label: 'Movespeed (cm/s)',
+                    dataId: 'clipSize',
+                    label: 'Clip Size (0 for unlimited)',
+                    validationInfo: 'Greater than or equal to 0. Integer.',
+                    validate: integerGreaterThanOrEqualToZero,
+                    parse: parseInt,
+                    group: 'character'
+                },
+                {
+                    dataId: 'reloadDuration',
+                    label: 'Reload Duration',
+                    validationInfo: 'Greater than or equal to 0.',
+                    validate: greaterThanOrEqualToZero,
+                    parse: parseFloat,
+                    group: 'character'
+                },
+                {
+                    dataId: 'rateOfFire',
+                    label: 'Rate of Fire (shots per second)',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
                     parse: parseFloat,
@@ -127,13 +151,29 @@ const SettingsPage = function(settings, onDone) {
                     validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
                     parse: parseFloat,
-                    group: 'targets'
+                    group: 'environment'
                 },
                 {
                     dataId: 'targetWallScreenRatio',
                     label: 'Target Wall Screen Ratio',
                     validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
+                    parse: parseFloat,
+                    group: 'environment'
+                },
+                {
+                    dataId: 'hitMarkerSize',
+                    label: 'Hit Marker Size',
+                    validationInfo: 'Greater than or equal to 0.',
+                    validate: greaterThanOrEqualToZero,
+                    parse: parseFloat,
+                    group: 'environment'
+                },
+                {
+                    dataId: 'hitMarkerDuration',
+                    label: 'Hit Marker Duration (ms) (0 to turn off)',
+                    validationInfo: 'Greater than or equal to 0.',
+                    validate: greaterThanOrEqualToZero,
                     parse: parseFloat,
                     group: 'environment'
                 },
@@ -178,30 +218,6 @@ const SettingsPage = function(settings, onDone) {
                     group: 'targets'
                 },
                 {
-                    dataId: 'clipSize',
-                    label: 'Clip Size (0 for unlimited)',
-                    validationInfo: 'Greater than or equal to 0. Integer.',
-                    validate: integerGreaterThanOrEqualToZero,
-                    parse: parseInt,
-                    group: 'character'
-                },
-                {
-                    dataId: 'reloadDuration',
-                    label: 'Reload Duration',
-                    validationInfo: 'Greater than or equal to 0.',
-                    validate: greaterThanOrEqualToZero,
-                    parse: parseFloat,
-                    group: 'character'
-                },
-                {
-                    dataId: 'rateOfFire',
-                    label: 'Rate of Fire (shots per second)',
-                    validationInfo: 'Greater than or equal to 0.',
-                    validate: greaterThanOrEqualToZero,
-                    parse: parseFloat,
-                    group: 'character'
-                },
-                {
                     dataId: 'targetHitpoints',
                     label: 'Target Hit Points',
                     validationInfo: 'Greater than or equal to 1. Integer.',
@@ -224,22 +240,6 @@ const SettingsPage = function(settings, onDone) {
                     validate: greaterThanOrEqualToZero,
                     parse: parseFloat,
                     group: 'targets'
-                },
-                {
-                    dataId: 'hitMarkerSize',
-                    label: 'Hit Marker Size',
-                    validationInfo: 'Greater than or equal to 0.',
-                    validate: greaterThanOrEqualToZero,
-                    parse: parseFloat,
-                    group: 'environment'
-                },
-                {
-                    dataId: 'hitMarkerDuration',
-                    label: 'Hit Marker Duration (ms) (0 to turn off)',
-                    validationInfo: 'Greater than or equal to 0.',
-                    validate: greaterThanOrEqualToZero,
-                    parse: parseFloat,
-                    group: 'environment'
                 }
             ]
         }
