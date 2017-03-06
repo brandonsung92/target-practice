@@ -201,8 +201,10 @@ const TargetGenerator = function(scene, settings, targetWall) {
         for (let i = 0; i < this.targets.length; i++) {
             let {object, velocity, hitpoints, lastHitTime, generateTime} = this.targets[i];
             if (this.settings.targetLifespan != 0) {
-                if (time - generateTime > this.settings.targetLifespan) this.removeTarget(this.targets[i]);
-                continue;
+                if (time - generateTime > this.settings.targetLifespan) {
+                    this.removeTarget(this.targets[i]);
+                    continue;
+                }
             }
 
             if (this.settings.targetSpeed != 0) {
