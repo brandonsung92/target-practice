@@ -175,24 +175,6 @@ const TargetGenerator = function(scene, settings, targetWall) {
         });
     };
 
-    this.calculateUsablePlaneBBox = function() {
-        // Calculate vertices of usable plane
-        let {width, height} = this.targetWall.geometry.parameters;
-        let {x, y, z} = this.targetWall.position;
-        let targetSize = this.settings.targetSize;
-        let min = new THREE.Vector3(
-            x + targetSize - (width / 2),
-            y + targetSize - (height / 2),
-            z
-        );
-        let max = new THREE.Vector3(
-            x - targetSize + (width / 2),
-            y - targetSize + (height / 2),
-            z
-        );
-        this.usablePlaneBBox = new THREE.Box3(min, max);
-    };
-
     // this needs to be called in game's animate method
     this.updateTargets = function() {
         let time = performance.now();
@@ -252,6 +234,24 @@ const TargetGenerator = function(scene, settings, targetWall) {
         if (left) velocity.x = Math.abs(velocity.x);
     };
 
+    let calculateUsablePlaneBBox = function() {
+        // Calculate vertices of usable plane
+        let {width, height} = this.targetWall.geometry.parameters;
+        let {x, y, z} = this.targetWall.position;
+        let targetSize = this.settings.targetSize;
+        let min = new THREE.Vector3(
+            x + targetSize - (width / 2),
+            y + targetSize - (height / 2),
+            z
+        );
+        let max = new THREE.Vector3(
+            x - targetSize + (width / 2),
+            y - targetSize + (height / 2),
+            z
+        );
+        this.usablePlaneBBox = new THREE.Box3(min, max);
+    };
+
     this.scene = scene;
     this.settings = settings;
     this.targetWall = targetWall;
@@ -283,7 +283,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
     this.hitSound = new Audio('./sfx/hit.wav');
     this.missSound = new Audio('./sfx/miss.wav');
 
-    this.calculateUsablePlaneBBox();
+    calculateUsablePlaneBBox.call(this);
 };
 
 module.exports = TargetGenerator;
