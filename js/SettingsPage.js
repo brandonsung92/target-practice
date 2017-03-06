@@ -84,27 +84,31 @@ const SettingsPage = function(settings, onDone) {
                 this.menu.disableButton('save', !valid);
                 this.menu.disableButton('saveToFile', !valid);
             }.bind(this),
+            groups: ['environment', 'character', 'targets'],
             fields: [
                 {
                     dataId: 'sensitivity',
                     label: 'Sensitivity (CS:GO sensitivity)',
                     validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'character'
                 },
                 {
                     dataId: 'elevation',
                     label: 'Elevation (cm)',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'character'
                 },
                 {
                     dataId: 'movespeed',
                     label: 'Movespeed (cm/s)',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'character'
                 },
                 {
                     dataId: 'hfov',
@@ -114,112 +118,128 @@ const SettingsPage = function(settings, onDone) {
                         let v = parseFloat(value);
                         return (v > 0) && (v < 360);
                     },
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'character'
                 },
                 {
                     dataId: 'targetDistance',
                     label: 'Target Distance (cm)',
                     validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'targets'
                 },
                 {
                     dataId: 'targetWallScreenRatio',
                     label: 'Target Wall Screen Ratio',
                     validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'environment'
                 },
                 {
                     dataId: 'targetSize',
                     label: 'Target Radius (cm)',
                     validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'targets'
                 },
                 {
                     dataId: 'targetInterval',
                     label: 'Target Interval (ms)',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'targets'
                 },
                 {
                     dataId: 'maxTargets',
                     label: 'Max Targets',
                     validationInfo: 'Greater than or equal to 1. Integer.',
                     validate: integerGreaterThanOrEqualToOne,
-                    parse: parseInt
+                    parse: parseInt,
+                    group: 'targets'
                 },
                 {
                     dataId: 'targetSpeed',
                     label: 'Target Speed (cm/s)',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'targets'
                 },
                 {
                     dataId: 'targetDirectionChangeInterval',
                     label: 'Time between target direction change (0 to turn off)',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'targets'
                 },
                 {
                     dataId: 'clipSize',
                     label: 'Clip Size (0 for unlimited)',
                     validationInfo: 'Greater than or equal to 0. Integer.',
                     validate: integerGreaterThanOrEqualToZero,
-                    parse: parseInt
+                    parse: parseInt,
+                    group: 'character'
                 },
                 {
                     dataId: 'reloadDuration',
                     label: 'Reload Duration',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'character'
                 },
                 {
                     dataId: 'rateOfFire',
                     label: 'Rate of Fire (shots per second)',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'character'
                 },
                 {
                     dataId: 'targetHitpoints',
                     label: 'Target Hit Points',
                     validationInfo: 'Greater than or equal to 1. Integer.',
                     validate: integerGreaterThanOrEqualToOne,
-                    parse: parseInt
+                    parse: parseInt,
+                    group: 'targets'
                 },
                 {
                     dataId: 'targetHealInterval',
                     label: 'Target Heal Interval After Hit (ms) (0 to turn off)',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'targets'
                 },
                 {
                     dataId: 'targetLifespan',
                     label: 'Target Lifespan (ms) (0 for infinite)',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'targets'
                 },
                 {
                     dataId: 'hitMarkerSize',
                     label: 'Hit Marker Size',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'environment'
                 },
                 {
                     dataId: 'hitMarkerDuration',
                     label: 'Hit Marker Duration (ms) (0 to turn off)',
                     validationInfo: 'Greater than or equal to 0.',
                     validate: greaterThanOrEqualToZero,
-                    parse: parseFloat
+                    parse: parseFloat,
+                    group: 'environment'
                 }
             ]
         }

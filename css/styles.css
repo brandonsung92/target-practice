@@ -96,9 +96,19 @@ html, body {
     padding: 40px 0;
 }
 
-#settings .field {
-    margin: 5px 0;
+#settings .group {
     border: 1px solid #EEEEEE;
+}
+
+#settings .group_header {
+    background-color: #EEEEEE;
+    color: #AAAAAA;
+    font-size: 20px;
+    padding: 10px;
+}
+
+#settings .group_fields {
+    padding: 10px;
 }
 
 #settings .field > * {
