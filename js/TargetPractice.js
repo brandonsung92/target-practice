@@ -18,6 +18,7 @@ const TargetPractice = function(browserProcess, settings) {
         targetWallScreenRatio: 0.3,
         targetSize: 50,
         targetInterval: 500,
+        targetDirectionChangeInterval: 0,
         maxTargets: 5,
         targetSpeed: 0,
         clipSize: 0,

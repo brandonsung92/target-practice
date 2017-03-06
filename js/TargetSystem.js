@@ -9,6 +9,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
         for (let i = 0; i < this.targets.length; i++) {
             this.targets[i].lastHitTime += time;
             this.targets[i].generateTime += time;
+            this.targets[i].lastDirectionChangeTime += time;
         }
 
         for (let i = 0; i < this.hitMarkers.length; i++) {
@@ -74,8 +75,9 @@ const TargetGenerator = function(scene, settings, targetWall) {
             object: object,
             velocity: velocity,
             hitpoints: targetHitpoints,
-            lastHitTime: performance.now(),
-            generateTime: performance.now()
+            lastHitTime: time,
+            generateTime: time,
+            lastDirectionChangeTime: time
         };
 
         this.scene.add(target.object);
@@ -181,7 +183,13 @@ const TargetGenerator = function(scene, settings, targetWall) {
         let timePassed = (time - this.prevUpdateTime) / 1000;
 
         for (let i = 0; i < this.targets.length; i++) {
-            let {object, velocity, hitpoints, lastHitTime, generateTime} = this.targets[i];
+            let {object,
+                velocity,
+                hitpoints,
+                lastHitTime,
+                generateTime,
+                lastDirectionChangeTime
+            } = this.targets[i];
             if (this.settings.targetLifespan != 0) {
                 if (time - generateTime > this.settings.targetLifespan) {
                     this.removeTarget(this.targets[i]);
@@ -191,6 +199,16 @@ const TargetGenerator = function(scene, settings, targetWall) {
 
             if (this.settings.targetSpeed != 0) {
                 this.adjustVelocityOnCollision(object, velocity);
+
+                if (this.settings.targetDirectionChangeInterval != 0) {
+                    if (this.settings.targetDirectionChangeInterval < time - lastDirectionChangeTime) {
+                        velocity.applyAxisAngle(
+                            new THREE.Vector3(0, 0, 1),
+                            Math.random() * 2 * Math.PI
+                        );
+                        this.targets[i].lastDirectionChangeTime = time;
+                    }
+                }
 
                 object.translateX(velocity.x * timePassed);
                 object.translateY(velocity.y * timePassed);
