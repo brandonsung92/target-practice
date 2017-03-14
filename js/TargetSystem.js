@@ -218,7 +218,7 @@ const TargetGenerator = function(scene, settings, targetWall) {
             let healDue = time - lastHitTime > this.settings.targetHealInterval
             if (targetHealOn && healDue) this.targets[i].hitpoints = this.settings.targetHitpoints;
 
-            object.material.opacity = (1 * hitpoints / this.settings.targetHitpoints);
+            object.material.opacity = 0.2 + (0.8 * hitpoints / this.settings.targetHitpoints);
         }
 
         this.prevUpdateTime = time;
