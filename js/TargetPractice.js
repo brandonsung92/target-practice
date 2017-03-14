@@ -28,7 +28,7 @@ const TargetPractice = function(browserProcess, settings) {
         targetDirectionChangeInterval: 0,
         targetHitpoints: 1,
         targetHealInterval: 0,
-        targetLifespan: 3000
+        targetLifespan: 0
     };
 
     this.setState = function(state) {
