@@ -1,5 +1,13 @@
 const $ = require('jquery');
 
+const buildColorString = function(color) {
+	let colorStr = 'rgb(';
+	colorStr += color.r + ',';
+	colorStr += color.g + ',';
+	colorStr += color.b + ')';
+	return colorStr;
+};
+
 const Crosshair = function(settings) {
 	this.$element = $("<div>").addClass('crosshair');
 
@@ -15,15 +23,19 @@ Crosshair.prototype.getTypes = function() {
 	return types;
 };
 
+Crosshair.prototype.dispose = function() {
+	this.$element.remove();
+};
+
 Crosshair.prototype.crosshairBuilders = {
-	'short crosshair': function($element, settings) {
+	'crosshair': function($element, settings) {
 		
 	},
 	'dot': function($element, settings) {
 		$element.css('height', settings.crosshairRadius);
 		$element.css('width', settings.crosshairRadius);
 		$element.css('border-radius', settings.crosshairRadius);
-		$element.css('background-color', 'rgb(0,255,255)');
+		$element.css('background-color', buildColorString(settings.crosshairColor));
 
 		if (settings.crosshairBorder) {
 			// use black for border color for now

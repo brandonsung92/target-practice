@@ -4,29 +4,6 @@ const EventHandler = require('./tools/EventHandler.js');
 // Implement fields types other than text field in future
 const Form = function(options) {
 
-    this.getParsedValues = function() {
-        let values = {};
-        for (let id in this.fields) {
-            let {$element, parse} = this.fields[id];
-            let val = $element.find('input').val();
-            values[id] = parse(val);
-        }
-        return values;
-    };
-
-    this.fillFields = function(data) {
-        for (id in this.fields) {
-            this.fields[id].$element.find('input').val(data[id]);
-        }
-        this.validate();
-    };
-
-    this.clearFields = function() {
-        for (id in this.fields) {
-            this.fields[id].$element.find('input').val('');
-        }
-    };
-
     this.validate = function() {
         let valid = true;
         for (let id in this.fields) {
@@ -131,6 +108,29 @@ const Form = function(options) {
     setupFields.call(this, options.fields);
     setupElements.call(this, options.element_id);
     setupListeners.call(this);
+};
+
+Form.prototype.getParsedValues = function() {
+    let values = {};
+    for (let id in this.fields) {
+        let {$element, parse} = this.fields[id];
+        let val = $element.find('input').val();
+        values[id] = parse(val);
+    }
+    return values;
+};
+
+Form.prototype.fillFields = function(data) {
+    for (id in this.fields) {
+        this.fields[id].$element.find('input').val(data[id]);
+    }
+    this.validate();
+};
+
+Form.prototype.clearFields = function() {
+    for (id in this.fields) {
+        this.fields[id].$element.find('input').val('');
+    }
 };
 
 module.exports = Form;
