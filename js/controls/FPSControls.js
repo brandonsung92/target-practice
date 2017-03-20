@@ -1,15 +1,28 @@
 const THREE = require('three');
 const EventHandler = require('../tools/EventHandler.js');
 
-const ThreeFPSControls = function(camera, sensitivity, movespeed, rateOfFire, afterFire) {
+const ThreeFPSControls = function(camera, collisionDetection, sensitivity, movespeed, rateOfFire, afterFire) {
 
-    this.addToTimers = function(time) {
+    // Used by ObjectManager
+    this.adjustTimers = function(time) {
         this.prevUpdateTime += time;
         this.prevFireTime += time;
     };
 
+    // Used by ObjectManager
     this.toggle = function(running) {
         this.running = running;
+    };
+
+    // Used by ObjectManager
+    this.dispose = function() {
+        this.eventHandler.removeListeners();
+    };
+
+    // Used by ObjectManager
+    this.update = function() {
+        this.updatePosition();
+        this.updateFireState();
     };
 
     this.setupListeners = function() {
@@ -90,10 +103,6 @@ const ThreeFPSControls = function(camera, sensitivity, movespeed, rateOfFire, af
         this.eventHandler.setupListeners();
     };
 
-    this.dispose = function() {
-        this.eventHandler.removeListeners();
-    };
-
     this.addTo = function(scene) {
         scene.add(this.yawObject);
     };
@@ -128,6 +137,12 @@ const ThreeFPSControls = function(camera, sensitivity, movespeed, rateOfFire, af
         this.yawObject.position.set(x, y, z);
     };
 
+    this.getRaycaster = function() {
+        let caster = new THREE.Raycaster();
+        caster.set(this.getPosition(), this.getDirection());
+        return caster;
+    };
+
     // this needs to be called in game's animate method
     this.updatePosition = function(collisionDetection) {
         let time = performance.now();
@@ -135,7 +150,7 @@ const ThreeFPSControls = function(camera, sensitivity, movespeed, rateOfFire, af
 
         let direction = new THREE.Vector3(0, 0, 0);
 
-        let adjustedMoveState = collisionDetection.getAdjustedMoveState(
+        let adjustedMoveState = this.collisionDetection.getAdjustedMoveState(
             this.moveState,
             this.getPosition(),
             this.getYawRotation()
@@ -163,7 +178,9 @@ const ThreeFPSControls = function(camera, sensitivity, movespeed, rateOfFire, af
         let shotDue = (time - this.prevFireTime) > ((1 / this.rateOfFire) * 1000);
         if (shotDue) {
             this.prevFireTime = time;
-            if (this.afterFire) this.afterFire();
+            if (this.afterFire) {
+                this.afterFire(this.getRaycaster());
+            }
         }
     };
 
@@ -173,6 +190,7 @@ const ThreeFPSControls = function(camera, sensitivity, movespeed, rateOfFire, af
 
     this.sensMultiplier = (degreesPerDot * sensitivity) * (Math.PI / 180);
 
+    this.collisionDetection = collisionDetection;
     this.moveState = {
         forward: false,
         left: false,

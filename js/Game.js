@@ -1,6 +1,8 @@
 const THREE = require('three');
 const $ = require('jquery');
 
+const ObjectManager = require('./ObjectManager.js');
+
 const World = require('./World.js');
 const CollisionDetection = require('./CollisionDetection.js');
 const Crosshair = require('./Crosshair.js');
@@ -9,7 +11,7 @@ const FPSControls = require('./controls/FPSControls.js');
 
 const Game = function(settings) {
     this.getStats = function() {
-        return this.world.targetSystem.getStats();
+        return this.objectManager.getObject('world').targetSystem.getStats();
     };
 
     this.setup = function() {
@@ -18,14 +20,11 @@ const Game = function(settings) {
         this.setupRenderer();
         this.setupCamera();
         this.setupControls();
-        this.setupPosition();
     };
 
     this.reset = function() {
-        this.world.dispose();
+        this.objectManager.disposeObjects();
         this.disposeObjects();
-
-        this.controls = null;
     };
 
     this.disposeObjects = function() {
@@ -52,19 +51,19 @@ const Game = function(settings) {
 
     this.resume = function() {
         let pausedTime = performance.now() - this.pauseTime;
-        this.adjustTimers(pausedTime);
+        this.objectManager.adjustTimers(pausedTime);
+        this.objectManager.toggleObjects(true);
 
         this.lockPointer();
-        this.toggleControls(true);
         this.running = true;
         this.animate();
     };
 
     this.pause = function() {
         this.pauseTime = performance.now();
+        this.objectManager.toggleObjects(false);
 
         this.releasePointer();
-        this.toggleControls(false);
         this.running = false;
     }
 
@@ -74,37 +73,20 @@ const Game = function(settings) {
         this.running = false;
     };
 
-    this.adjustTimers = function(pausedTime) {
-        this.controls.addToTimers(pausedTime);
-
-        this.world.targetSystem.addToTimers(pausedTime);
-    };
-
-    this.toggleControls = function(running) {
-        this.controls.toggle(running);
-    };
-
     this.animate = function() {
         if (!this.running) return;
         requestAnimationFrame(this.animate);
 
-        this.controls.updatePosition(this.collisionDetection);
-        this.controls.updateFireState();
+        this.objectManager.updateObjects();
 
-        this.world.update();
-
-        this.renderer.render(this.world.scene, this.camera);
+        this.renderer.render(this.objectManager.getObject('world').scene, this.camera);
     }.bind(this);
 
     this.setupWorld = function() {
-        this.world = new World(this.settings, this.collisionDetection);
-        this.world.create();
-    };
+        let world = new World(this.settings, this.collisionDetection);
+        world.create();
 
-    this.setupPosition = function() {
-        let {elevation, movespeed} = this.settings;
-        let positionZ = (this.world.getSceneLength() - movespeed) / 2;
-        this.controls.setPosition(0, elevation, positionZ);
+        this.objectManager.registerObject('world', world);
     };
 
     this.setupCharacterCollision = function() {
@@ -127,7 +109,7 @@ const Game = function(settings) {
         let {gameWidth, gameHeight, hfov} = this.settings;
         let aspect = gameWidth / gameHeight;
         let vfov = hfov / aspect;
-        let far = Math.pow(this.world.getSceneLength(), 3);
+        let far = Math.pow(this.objectManager.getObject('world').getSceneLength(), 3);
 
         this.camera = new THREE.PerspectiveCamera(vfov, aspect, 0.1, far);
 
@@ -156,27 +138,30 @@ const Game = function(settings) {
     };
 
     this.setupCrosshair = function() {
-        this.crosshair = new Crosshair(this.settings);
-        this.$element.append(this.crosshair.$element);
+        let crosshair = new Crosshair(this.settings);
+        this.$element.append(crosshair.$element);
+        this.objectManager.registerObject('crosshair', crosshair);
     };
 
     this.setupControls = function() {
-        this.controls = new FPSControls(
+        let controls = new FPSControls(
             this.camera,
+            this.collisionDetection,
             this.settings.sensitivity,
             this.settings.movespeed,
             this.settings.rateOfFire,
-            function() {
-                let position = this.controls.getPosition();
-                let direction = this.controls.getDirection();
-
-                let caster = new THREE.Raycaster();
-                caster.set(position, direction);
-                this.world.targetSystem.hitCheck(caster);
+            function(caster) {
+                this.objectManager.getObject('world').targetSystem.hitCheck(caster);
             }.bind(this)
         );
-        this.controls.addTo(this.world.scene);
-        this.disposableObjects.push(this.controls);
+        controls.addTo(this.objectManager.getObject('world').scene);
+
+        // Set starting position
+        let {elevation, movespeed} = this.settings;
+        let positionZ = (this.objectManager.getObject('world').getSceneLength() - movespeed) / 2;
+        controls.setPosition(0, elevation, positionZ);
+
+        this.objectManager.registerObject('controls', controls);
     };
 
     let setupElements = function() {
@@ -185,6 +170,7 @@ const Game = function(settings) {
 
     this.running = false;
     this.settings = settings;
+    this.objectManager = new ObjectManager();
     this.disposableObjects = [];
 
     setupElements.call(this);

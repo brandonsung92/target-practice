@@ -2,7 +2,7 @@ const THREE = require('three');
 
 const TargetGenerator = function(scene, settings, targetWall) {
 
-    this.addToTimers = function(time) {
+    this.adjustTimers = function(time) {
         this.prevGenerateTime += time;
         this.prevUpdateTime += time;
 
