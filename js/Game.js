@@ -1,6 +1,7 @@
 const THREE = require('three');
 const $ = require('jquery');
 
+const World = require('./World.js');
 const CollisionDetection = require('./CollisionDetection.js');
 const TargetSystem = require('./TargetSystem.js');
 const Crosshair = require('./Crosshair.js');
@@ -15,6 +16,7 @@ const Game = function(settings) {
 
     this.setup = function() {
         this.setupCharacterCollision();
+        this.setupWorld();
         this.setupScene();
         this.setupRenderer();
         this.setupCamera();
@@ -25,28 +27,12 @@ const Game = function(settings) {
     };
 
     this.reset = function() {
-        this.clearScene();
+        this.world.dispose();
         this.disposeObjects();
 
-        this.scene = null;
         this.targetSystem = null;
         this.firingControls = null;
         this.controls = null;
-    };
-
-    this.clearScene = function() {
-        if (this.scene) {
-            let clear = function(obj) {
-                let i = obj.children.length;
-                while (i > 0) {
-                    i--;
-                    let child = obj.children[i];
-                    if (child.children.length) clear(child);
-                    obj.remove(obj.children[i]);
-                }
-            };
-            clear(this.scene);
-        }
     };
 
     this.disposeObjects = function() {
@@ -120,8 +106,13 @@ const Game = function(settings) {
         this.firingControls.updateFireState();
         this.firingControls.updateReloadState();
 
-        this.renderer.render(this.scene, this.camera);
+        this.renderer.render(this.world.scene, this.camera);
     }.bind(this);
+
+    this.setupWorld = function() {
+        this.world = new World(this.settings, this.collisionDetection);
+        this.world.createScene();
+    };
 
     this.setupFiringControls = function() {
         let afterFire = function() {
@@ -145,16 +136,16 @@ const Game = function(settings) {
 
     this.setupTargetSystem = function() {
         this.targetSystem = new TargetSystem(
-            this.scene,
+            this.world.scene,
             this.settings,
-            this.targetWall
+            this.world.targetWall
         );
         this.disposableObjects.push(this.targetSystem);
     };
 
     this.setupPosition = function() {
         let {elevation, movespeed} = this.settings;
-        let positionZ = (this.getSceneLength() - movespeed) / 2;
+        let positionZ = (this.world.getSceneLength() - movespeed) / 2;
         this.controls.setPosition(0, elevation, positionZ);
     };
 
@@ -178,7 +169,7 @@ const Game = function(settings) {
         let {gameWidth, gameHeight, hfov} = this.settings;
         let aspect = gameWidth / gameHeight;
         let vfov = hfov / aspect;
-        let far = Math.pow(this.getSceneLength(), 3);
+        let far = Math.pow(this.world.getSceneLength(), 3);
 
         this.camera = new THREE.PerspectiveCamera(vfov, aspect, 0.1, far);
 
@@ -217,112 +208,11 @@ const Game = function(settings) {
             this.settings.sensitivity,
             this.settings.movespeed
         );
-        this.controls.addTo(this.scene);
+        this.controls.addTo(this.world.scene);
         this.disposableObjects.push(this.controls);
     };
 
-    this.getSceneLength = function() {
-        let {targetDistance, movespeed} = this.settings;
-        return targetDistance + (movespeed / 2);
-    };
-
-    this.getSceneWidth = function() {
-        let {hfov, targetWallScreenRatio, targetDistance} = this.settings;
-
-        let halfFovRad = hfov * Math.PI / 360;
-        return Math.abs(Math.tan(halfFovRad) * targetDistance * 2 * targetWallScreenRatio);
-    };
-
-    this.getSceneHeight = function(sceneWidth) {
-        let {gameHeight, gameWidth} = this.settings;
-        sceneWidth = sceneWidth || this.getSceneWidth();
-        return Math.abs(sceneWidth * (gameHeight / gameWidth));
-    };
-
-    this.setupScene = function() {
-        let mesh, geometry, material;
-
-        this.scene = new THREE.Scene();
-
-        let sceneLength = this.getSceneLength();
-        let sceneWidth = this.getSceneWidth();
-        let sceneHeight = this.getSceneHeight(sceneWidth);
-
-        let {movespeed, elevation} = this.settings;
-
-        let floorColor = 0xCCCCCC;
-        let wallColor = 0xEEEEEE;
-        let targetWallColor = 0xFFFFCC;
-
-        // setup floor and roof
-        material = new THREE.MeshBasicMaterial({ color: floorColor });
-
-        geometry = new THREE.PlaneGeometry(sceneWidth, sceneLength);
-        geometry.rotateX(-Math.PI / 2);
-        mesh = new THREE.Mesh(geometry, material);
-        this.scene.add(mesh);
-        this.disposableObjects.push(material, geometry);
-
-        geometry = new THREE.PlaneGeometry(sceneWidth, sceneLength);
-        geometry.rotateX(Math.PI / 2);
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(0, sceneHeight, 0)
-        this.scene.add(mesh);
-        this.disposableObjects.push(geometry);
-
-        // setup walls
-        // target wall
-        material = new THREE.MeshBasicMaterial({ color: targetWallColor });
-        geometry = new THREE.PlaneGeometry(sceneWidth, sceneHeight);
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(0, sceneHeight / 2, -sceneLength / 2);
-        this.collisionDetection.addCollisionObject(mesh);
-        this.scene.add(mesh);
-        this.targetWall = mesh;
-        this.disposableObjects.push(material, geometry);
-
-        material = new THREE.MeshBasicMaterial({ color: wallColor });
-        geometry = new THREE.PlaneGeometry(sceneWidth, sceneHeight);
-        mesh = new THREE.Mesh(geometry, material);
-        geometry.rotateX(Math.PI);
-        mesh.position.set(0, sceneHeight / 2, sceneLength / 2);
-        this.collisionDetection.addCollisionObject(mesh);
-        this.scene.add(mesh);
-        this.disposableObjects.push(material, geometry);
-
-        geometry = new THREE.PlaneGeometry(sceneLength, sceneHeight);
-        geometry.rotateY(Math.PI / 2);
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(-sceneWidth / 2, sceneHeight / 2, 0);
-        this.collisionDetection.addCollisionObject(mesh);
-        this.scene.add(mesh);
-        this.disposableObjects.push(geometry);
-
-        geometry = new THREE.PlaneGeometry(sceneLength, sceneHeight);
-        geometry.rotateY(-Math.PI / 2);
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(sceneWidth / 2, sceneHeight / 2, 0);
-        this.collisionDetection.addCollisionObject(mesh);
-        this.scene.add(mesh);
-        this.disposableObjects.push(geometry);
-
-        // to indicate invisible wall
-        geometry = new THREE.PlaneGeometry(sceneWidth, elevation / 2);
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(0, elevation / 4, (sceneLength / 2) - movespeed);
-        this.scene.add(mesh);
-        this.disposableObjects.push(geometry);
-
-        // setup invisible wall
-        material = new THREE.MeshBasicMaterial();
-        material.visible = false;
-        geometry = new THREE.PlaneGeometry(sceneWidth, sceneHeight);
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(0, sceneHeight / 2, (sceneLength / 2) - movespeed);
-        this.collisionDetection.addCollisionObject(mesh);
-        this.scene.add(mesh);
-        this.disposableObjects.push(material, geometry);
-    };
+    this.setupScene = function() {};
 
     let setupElements = function() {
         this.$element = $("<div>").attr('id', 'game');
