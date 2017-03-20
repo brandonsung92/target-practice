@@ -124,15 +124,14 @@ const Game = function(settings) {
     };
 
     this.setupControls = function() {
+        let targetSystem = this.objectManager.getObject('world').targetSystem;
         let controls = new FPSControls(
             this.camera,
             this.collisionDetection,
             this.settings.sensitivity,
             this.settings.movespeed,
             this.settings.rateOfFire,
-            function(caster) {
-                this.objectManager.getObject('world').targetSystem.hitCheck(caster);
-            }.bind(this)
+            targetSystem.hitCheck.bind(targetSystem)
         );
         controls.addTo(this.objectManager.getObject('world').scene);
 
