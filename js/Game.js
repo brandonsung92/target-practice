@@ -15,12 +15,47 @@ const Game = function(settings) {
     };
 
     this.setup = function() {
-        this.setupCharacterCollision();
-        this.setupWorld();
+        this.setupObjects();
         this.setupRenderer();
-        this.setupCamera();
-        this.setupControls();
-        this.setupCrosshair();
+    };
+
+    this.setupObjects = function() {
+        // collisionDetection
+        let collisionDetection = new CollisionDetection();
+
+        // world
+        let world = new World(this.settings, collisionDetection);
+        world.create();
+
+        // camera
+        let {gameWidth, gameHeight, hfov, elevation, movespeed} = this.settings;
+        let aspect = gameWidth / gameHeight;
+        let vfov = hfov / aspect;
+        let far = Math.pow(world.getSceneLength(), 3);
+        let camera = new THREE.PerspectiveCamera(vfov, aspect, 0.1, far)
+
+        // controls
+        let controls = new FPSControls(
+            camera,
+            collisionDetection,
+            this.settings.sensitivity,
+            this.settings.movespeed,
+            this.settings.rateOfFire,
+            world.targetSystem.hitCheck.bind(world.targetSystem)
+        );
+        controls.addTo(world.scene);
+        let positionZ = (world.getSceneLength() - movespeed) / 2;
+        controls.setPosition(0, elevation, positionZ); // set initial position
+        
+        // crosshair
+        let crosshair = new Crosshair(this.settings);
+        this.$element.append(crosshair.$element);
+
+        this.objectManager.registerObject('collisionDetection', collisionDetection);
+        this.objectManager.registerObject('world', world);
+        this.objectManager.registerObject('camera', camera);
+        this.objectManager.registerObject('controls', controls);
+        this.objectManager.registerObject('crosshair', crosshair);
     };
 
     this.reset = function() {
@@ -82,19 +117,11 @@ const Game = function(settings) {
 
         this.objectManager.updateObjects();
 
-        this.renderer.render(this.objectManager.getObject('world').scene, this.camera);
+        this.renderer.render(
+            this.objectManager.getObject('world').scene,
+            this.objectManager.getObject('camera')
+        );
     }.bind(this);
-
-    this.setupWorld = function() {
-        let world = new World(this.settings, this.collisionDetection);
-        world.create();
-
-        this.objectManager.registerObject('world', world);
-    };
-
-    this.setupCharacterCollision = function() {
-        this.collisionDetection = new CollisionDetection();
-    };
 
     this.setupRenderer = function() {
         if (this.renderer) return;
@@ -106,41 +133,6 @@ const Game = function(settings) {
         this.renderer.setSize(gameWidth, gameHeight);
 
         this.$element.append(this.renderer.domElement);
-    };
-
-    this.setupCamera = function() {
-        let {gameWidth, gameHeight, hfov} = this.settings;
-        let aspect = gameWidth / gameHeight;
-        let vfov = hfov / aspect;
-        let far = Math.pow(this.objectManager.getObject('world').getSceneLength(), 3);
-
-        this.camera = new THREE.PerspectiveCamera(vfov, aspect, 0.1, far);
-    };
-
-    this.setupCrosshair = function() {
-        let crosshair = new Crosshair(this.settings);
-        this.$element.append(crosshair.$element);
-        this.objectManager.registerObject('crosshair', crosshair);
-    };
-
-    this.setupControls = function() {
-        let targetSystem = this.objectManager.getObject('world').targetSystem;
-        let controls = new FPSControls(
-            this.camera,
-            this.collisionDetection,
-            this.settings.sensitivity,
-            this.settings.movespeed,
-            this.settings.rateOfFire,
-            targetSystem.hitCheck.bind(targetSystem)
-        );
-        controls.addTo(this.objectManager.getObject('world').scene);
-
-        // Set starting position
-        let {elevation, movespeed} = this.settings;
-        let positionZ = (this.objectManager.getObject('world').getSceneLength() - movespeed) / 2;
-        controls.setPosition(0, elevation, positionZ);
-
-        this.objectManager.registerObject('controls', controls);
     };
 
     let setupElements = function() {
