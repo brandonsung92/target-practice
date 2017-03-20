@@ -1,10 +1,11 @@
 const THREE = require('three');
 const EventHandler = require('../tools/EventHandler.js');
 
-const ThreeFPSControls = function(camera, sensitivity, movespeed) {
+const ThreeFPSControls = function(camera, sensitivity, movespeed, rateOfFire, afterFire) {
 
     this.addToTimers = function(time) {
         this.prevUpdateTime += time;
+        this.prevFireTime += time;
     };
 
     this.toggle = function(running) {
@@ -69,6 +70,20 @@ const ThreeFPSControls = function(camera, sensitivity, movespeed) {
                         case 68: // d
                             this.moveState.right = false;
                     }
+                }.bind(this)
+            },
+            {
+                type: 'mousedown',
+                element: document,
+                listener: function() {
+                    if (this.running) this.firing = true;
+                }.bind(this)
+            },
+            {
+                type: 'mouseup',
+                element: document,
+                listener: function() {
+                    this.firing = false;
                 }.bind(this)
             }
         ]);
@@ -140,6 +155,18 @@ const ThreeFPSControls = function(camera, sensitivity, movespeed) {
         this.prevUpdateTime = time;
     }
 
+    this.updateFireState = function() {
+        if (!this.firing) return;
+
+        let time = performance.now();
+
+        let shotDue = (time - this.prevFireTime) > ((1 / this.rateOfFire) * 1000);
+        if (shotDue) {
+            this.prevFireTime = time;
+            if (this.afterFire) this.afterFire();
+        }
+    };
+
     this.movespeed = movespeed;
 
     let degreesPerDot = 0.022; // Multiplier used in CSGO
@@ -161,6 +188,12 @@ const ThreeFPSControls = function(camera, sensitivity, movespeed) {
     camera.rotation.set(0, 0, 0);
     this.pitchObject.add(camera);
     this.yawObject.add(this.pitchObject);
+
+    this.rateOfFire = rateOfFire;
+    this.afterFire = afterFire;
+
+    this.prevFireTime = performance.now();
+    this.firing = false;
 
     this.running = true;
 
