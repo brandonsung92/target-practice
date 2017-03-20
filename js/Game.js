@@ -5,7 +5,7 @@ const World = require('./World.js');
 const CollisionDetection = require('./CollisionDetection.js');
 const Crosshair = require('./Crosshair.js');
 
-const FPSControls = require('./controls/ThreeFPSControls.js');
+const FPSControls = require('./controls/FPSControls.js');
 
 const Game = function(settings) {
     this.getStats = function() {
