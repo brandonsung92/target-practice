@@ -53,18 +53,20 @@ const Game = function(settings) {
     this.resume = function() {
         let pausedTime = performance.now() - this.pauseTime;
         this.objectManager.adjustTimers(pausedTime);
-        this.objectManager.toggleObjects(true);
 
         this.lockPointer();
+
+        this.objectManager.toggleObjects(true);
         this.running = true;
         this.animate();
     };
 
     this.pause = function() {
         this.pauseTime = performance.now();
-        this.objectManager.toggleObjects(false);
 
         this.releasePointer();
+
+        this.objectManager.toggleObjects(false);
         this.running = false;
     }
 
