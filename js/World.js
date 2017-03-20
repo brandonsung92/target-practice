@@ -1,5 +1,6 @@
 const THREE = require('three');
 const CollisionDetection = require('./CollisionDetection.js')
+const TargetSystem = require('./TargetSystem.js');
 
 const World = function(settings, collisionDetection) {
 	this.settings = settings;
@@ -7,7 +8,13 @@ const World = function(settings, collisionDetection) {
 	this.disposableObjects = [];
 
 	this.targetWall = null;
+	this.targetSystem = null;
 }
+
+World.prototype.create = function() {
+	this.createScene();
+	this.createTargetSystem();
+};
 
 World.prototype.createScene = function() {
 	let mesh, geometry, material;
@@ -94,6 +101,15 @@ World.prototype.createScene = function() {
     this.disposableObjects.push(material, geometry);
 };
 
+World.prototype.createTargetSystem = function() {
+    this.targetSystem = new TargetSystem(
+        this.scene,
+        this.settings,
+        this.targetWall
+    );
+    this.disposableObjects.push(this.targetSystem);
+};
+
 World.prototype.dispose = function() {
 	// Clear all children of scene
     if (this.scene) {
@@ -114,6 +130,12 @@ World.prototype.dispose = function() {
         this.disposableObjects[i].dispose();
     }
     this.disposableObjects = [];
+};
+
+World.prototype.update = function() {
+    this.targetSystem.generateTarget();
+    this.targetSystem.updateTargets();
+    this.targetSystem.updateHitMarkers();
 };
 
 World.prototype.getSceneLength = function() {

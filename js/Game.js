@@ -3,7 +3,6 @@ const $ = require('jquery');
 
 const World = require('./World.js');
 const CollisionDetection = require('./CollisionDetection.js');
-const TargetSystem = require('./TargetSystem.js');
 const Crosshair = require('./Crosshair.js');
 
 const FiringControls = require('./controls/FiringControls.js');
@@ -11,7 +10,7 @@ const FPSControls = require('./controls/ThreeFPSControls.js');
 
 const Game = function(settings) {
     this.getStats = function() {
-        return this.targetSystem.getStats();
+        return this.world.targetSystem.getStats();
     };
 
     this.setup = function() {
@@ -22,7 +21,6 @@ const Game = function(settings) {
         this.setupCamera();
         this.setupControls();
         this.setupFiringControls();
-        this.setupTargetSystem();
         this.setupPosition();
     };
 
@@ -30,7 +28,6 @@ const Game = function(settings) {
         this.world.dispose();
         this.disposeObjects();
 
-        this.targetSystem = null;
         this.firingControls = null;
         this.controls = null;
     };
@@ -85,7 +82,7 @@ const Game = function(settings) {
         this.controls.addToTimers(pausedTime);
         this.firingControls.addToTimers(pausedTime);
 
-        this.targetSystem.addToTimers(pausedTime);
+        this.world.targetSystem.addToTimers(pausedTime);
     };
 
     this.toggleControls = function(running) {
@@ -99,9 +96,7 @@ const Game = function(settings) {
 
         this.controls.updatePosition(this.collisionDetection);
 
-        this.targetSystem.generateTarget();
-        this.targetSystem.updateTargets();
-        this.targetSystem.updateHitMarkers();
+        this.world.update();
 
         this.firingControls.updateFireState();
         this.firingControls.updateReloadState();
@@ -111,7 +106,7 @@ const Game = function(settings) {
 
     this.setupWorld = function() {
         this.world = new World(this.settings, this.collisionDetection);
-        this.world.createScene();
+        this.world.create();
     };
 
     this.setupFiringControls = function() {
@@ -121,7 +116,7 @@ const Game = function(settings) {
 
             let caster = new THREE.Raycaster();
             caster.set(position, direction);
-            this.targetSystem.hitCheck(caster);
+            this.world.targetSystem.hitCheck(caster);
         }.bind(this);
 
         this.firingControls = new FiringControls(
@@ -132,15 +127,6 @@ const Game = function(settings) {
             afterFire
         );
         this.disposableObjects.push(this.firingControls);
-    };
-
-    this.setupTargetSystem = function() {
-        this.targetSystem = new TargetSystem(
-            this.world.scene,
-            this.settings,
-            this.world.targetWall
-        );
-        this.disposableObjects.push(this.targetSystem);
     };
 
     this.setupPosition = function() {
