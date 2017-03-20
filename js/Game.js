@@ -3,6 +3,7 @@ const $ = require('jquery');
 
 const CollisionDetection = require('./CollisionDetection.js');
 const TargetSystem = require('./TargetSystem.js');
+const Crosshair = require('./Crosshair.js');
 
 const FiringControls = require('./controls/FiringControls.js');
 const FPSControls = require('./controls/ThreeFPSControls.js');
@@ -203,6 +204,11 @@ const Game = function(settings) {
         this.camera.add(hor);
 
         this.disposableObjects.push(vertGeo, horGeo, material);
+    };
+
+    this.setupCrosshair = function() {
+        this.crosshair = new Crosshair(this.settings);
+        this.$element.append(this.crosshair.$element);
     };
 
     this.setupControls = function() {

@@ -136,6 +136,10 @@ html, body {
     margin: 10px;
 }
 
+#game .crosshair {
+    position: absolute;
+}
+
 .menu {
     padding: 10px;
     text-align: center;
