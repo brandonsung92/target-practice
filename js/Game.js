@@ -20,6 +20,7 @@ const Game = function(settings) {
         this.setupRenderer();
         this.setupCamera();
         this.setupControls();
+        this.setupCrosshair();
     };
 
     this.reset = function() {
@@ -112,29 +113,6 @@ const Game = function(settings) {
         let far = Math.pow(this.objectManager.getObject('world').getSceneLength(), 3);
 
         this.camera = new THREE.PerspectiveCamera(vfov, aspect, 0.1, far);
-
-        // add a crosshair
-        // crosshair options future feature?
-        // use rectangles instead of lines later
-        let vertGeo = new THREE.Geometry();
-        let horGeo = new THREE.Geometry();
-        let material = new THREE.LineBasicMaterial({color: 0x333333});
-
-        vertGeo.vertices.push(
-            new THREE.Vector3(0, 0.1, -5),
-            new THREE.Vector3(0, -0.1, -5)
-        );
-        let vert = new THREE.Line(vertGeo, material);
-
-        horGeo.vertices.push(
-            new THREE.Vector3(0.1, 0, -5),
-            new THREE.Vector3(-0.1, 0, -5)
-        );
-        let hor = new THREE.Line(horGeo, material);
-        this.camera.add(vert); 
-        this.camera.add(hor);
-
-        this.disposableObjects.push(vertGeo, horGeo, material);
     };
 
     this.setupCrosshair = function() {
