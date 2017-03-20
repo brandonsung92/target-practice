@@ -15,7 +15,6 @@ const Game = function(settings) {
     this.setup = function() {
         this.setupCharacterCollision();
         this.setupWorld();
-        this.setupScene();
         this.setupRenderer();
         this.setupCamera();
         this.setupControls();
@@ -179,8 +178,6 @@ const Game = function(settings) {
         this.controls.addTo(this.world.scene);
         this.disposableObjects.push(this.controls);
     };
-
-    this.setupScene = function() {};
 
     let setupElements = function() {
         this.$element = $("<div>").attr('id', 'game');
