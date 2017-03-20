@@ -99,7 +99,6 @@ const Game = function(settings) {
         this.world.update();
 
         this.firingControls.updateFireState();
-        this.firingControls.updateReloadState();
 
         this.renderer.render(this.world.scene, this.camera);
     }.bind(this);
@@ -120,10 +119,7 @@ const Game = function(settings) {
         }.bind(this);
 
         this.firingControls = new FiringControls(
-            this.settings.clipSize,
             this.settings.rateOfFire,
-            this.settings.reloadDuration,
-            this.$ammoInfo,
             afterFire
         );
         this.disposableObjects.push(this.firingControls);
@@ -202,8 +198,6 @@ const Game = function(settings) {
 
     let setupElements = function() {
         this.$element = $("<div>").attr('id', 'game');
-        this.$ammoInfo = $("<div>").attr('id','ammo_info');
-        this.$element.append(this.$ammoInfo);
     };
 
     this.running = false;

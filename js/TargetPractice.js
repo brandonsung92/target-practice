@@ -13,8 +13,6 @@ const TargetPractice = function(browserProcess, settings) {
         sensitivity: 1,
         elevation: 600,
         movespeed: 550,
-        clipSize: 0,
-        reloadDuration: 500,
         rateOfFire: 8.8,
         hfov: 103,
         targetDistance: 2500,

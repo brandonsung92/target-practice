@@ -44,15 +44,6 @@ html, body {
     z-index: 0;
 }
 
-#game #ammo_info {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    padding: 20px;
-    color: #000000;
-    font-size: 20px;
-}
-
 #pause {
     position: absolute;
     left: 0;

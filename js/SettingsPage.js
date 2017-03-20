@@ -111,22 +111,6 @@ const SettingsPage = function(settings, onDone) {
                     group: 'character'
                 },
                 {
-                    dataId: 'clipSize',
-                    label: 'Clip Size (0 for unlimited)',
-                    validationInfo: 'Greater than or equal to 0. Integer.',
-                    validate: integerGreaterThanOrEqualToZero,
-                    parse: parseInt,
-                    group: 'character'
-                },
-                {
-                    dataId: 'reloadDuration',
-                    label: 'Reload Duration',
-                    validationInfo: 'Greater than or equal to 0.',
-                    validate: greaterThanOrEqualToZero,
-                    parse: parseFloat,
-                    group: 'character'
-                },
-                {
                     dataId: 'rateOfFire',
                     label: 'Rate of Fire (shots per second)',
                     validationInfo: 'Greater than or equal to 0.',
