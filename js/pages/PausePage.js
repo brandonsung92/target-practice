@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const Menu = require('./Menu.js');
+const Menu = require('../ui/Menu.js');
 
 const PausePage = function(onResume, onEnd) {
     this.updateStats = function(rawStats) {

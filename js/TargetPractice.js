@@ -1,8 +1,8 @@
 const $ = require('jquery');
 const Game = require('./Game.js');
-const Menu = require('./Menu.js');
-const SettingsPage = require('./SettingsPage.js');
-const PausePage = require('./PausePage.js');
+const Menu = require('./ui/Menu.js');
+const SettingsPage = require('./pages/SettingsPage.js');
+const PausePage = require('./pages/PausePage.js');
 const EventHandler = require('./tools/EventHandler.js');
 
 const TargetPractice = function(browserProcess, settings) {

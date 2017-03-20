@@ -1,11 +1,11 @@
 const THREE = require('three');
 const $ = require('jquery');
 
-const ObjectManager = require('./ObjectManager.js');
+const ObjectManager = require('./tools/ObjectManager.js');
 
-const World = require('./World.js');
-const CollisionDetection = require('./CollisionDetection.js');
-const Crosshair = require('./Crosshair.js');
+const World = require('./objects/World.js');
+const CollisionDetection = require('./objects/CollisionDetection.js');
+const Crosshair = require('./objects/Crosshair.js');
 
 const FPSControls = require('./controls/FPSControls.js');
 

@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const EventHandler = require('./tools/EventHandler.js');
+const EventHandler = require('../tools/EventHandler.js');
 
 // Implement fields types other than text field in future
 const Form = function(options) {
