@@ -31,7 +31,7 @@ const TargetPractice = function(browserProcess, settings) {
         crosshairColor: {
             r: 0,
             g: 255,
-            b: 255
+            b: 0
         },
         crosshairRadius: 5,
         crosshairBorder: 1
