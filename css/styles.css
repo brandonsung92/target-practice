@@ -44,6 +44,11 @@ html, body {
     z-index: 0;
 }
 
+#game canvas {
+    position: absolute;
+    z-index: -1;
+}
+
 #pause {
     position: absolute;
     left: 0;
