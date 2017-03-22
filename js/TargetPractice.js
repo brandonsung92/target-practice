@@ -35,7 +35,8 @@ const TargetPractice = function(browserProcess, settings) {
         crosshairSize: 10,
         crosshairGap: 4,
         crosshairThickness: 2,
-        crosshairBorderThickness: 1
+        crosshairBorderThickness: 1,
+        crosshairOpacity: 0.8
     };
 
     this.setState = function(state) {

@@ -14,7 +14,8 @@ const Crosshair = function(settings) {
         crosshairThickness,
         crosshairSize,
         crosshairGap,
-        crosshairBorderThickness
+        crosshairBorderThickness,
+        crosshairOpacity
     } = settings;
 
     this.$element = $("<div>").addClass('crosshair');
@@ -37,7 +38,8 @@ const Crosshair = function(settings) {
             .css('background-color', colorStr)
             .css('height', height + 'px')
             .css('width', width + 'px')
-            .css('border-width', crosshairBorderThickness + 'px');
+            .css('border-width', crosshairBorderThickness + 'px')
+            .css('opacity', crosshairOpacity)
 
         this.$element.append(lines[i]);
     }

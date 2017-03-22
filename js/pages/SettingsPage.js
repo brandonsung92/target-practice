@@ -162,6 +162,17 @@ const SettingsPage = function(settings, onDone) {
                     group: 'crosshair'
                 },
                 {
+                    dataId: 'crosshairOpacity',
+                    label: 'Opacity of lines in crosshair',
+                    validationInfo: 'Between 0 and 1, inclusive.',
+                    validate: function(value) {
+                        let v = parseFloat(value);
+                        return v >= 0 && v <= 1
+                    },
+                    parse: parseFloat,
+                    group: 'crosshair'
+                },
+                {
                     dataId: 'targetDistance',
                     label: 'Target Distance (cm)',
                     validationInfo: 'Greater than 0.',
