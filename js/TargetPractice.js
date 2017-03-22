@@ -27,14 +27,15 @@ const TargetPractice = function(browserProcess, settings) {
         targetHitpoints: 1,
         targetHealInterval: 0,
         targetLifespan: 0,
-        crosshairType: 'dot',
         crosshairColor: {
             r: 0,
             g: 255,
             b: 0
         },
-        crosshairRadius: 5,
-        crosshairBorder: 1
+        crosshairSize: 10,
+        crosshairGap: 4,
+        crosshairThickness: 2,
+        crosshairBorderThickness: 1
     };
 
     this.setState = function(state) {
