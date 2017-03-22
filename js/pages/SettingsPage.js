@@ -84,7 +84,7 @@ const SettingsPage = function(settings, onDone) {
                 this.menu.disableButton('save', !valid);
                 this.menu.disableButton('saveToFile', !valid);
             }.bind(this),
-            groups: ['character', 'environment', 'targets'],
+            groups: ['character', 'crosshair', 'environment', 'targets'],
             fields: [
                 {
                     dataId: 'sensitivity',
@@ -128,6 +128,38 @@ const SettingsPage = function(settings, onDone) {
                     },
                     parse: parseFloat,
                     group: 'character'
+                },
+                {
+                    dataId: 'crosshairSize',
+                    label: 'Size of the lines in the crosshair (px)',
+                    validationInfo: 'Greater than or equal to 1. Integer.',
+                    validate: integerGreaterThanOrEqualToOne,
+                    parse: parseInt,
+                    group: 'crosshair'
+                },
+                {
+                    dataId: 'crosshairGap',
+                    label: 'Gap between lines in crosshair (px) (hint: use an even number)',
+                    validationInfo: 'Greater than or equal to 0. Integer.',
+                    validate: integerGreaterThanOrEqualToZero,
+                    parse: parseInt,
+                    group: 'crosshair'
+                },
+                {
+                    dataId: 'crosshairThickness',
+                    label: 'Thickness of lines in crosshair (px) (hint: use an even number)',
+                    validationInfo: 'Greater than or equal to 1. Integer.',
+                    validate: integerGreaterThanOrEqualToOne,
+                    parse: parseInt,
+                    group: 'crosshair'
+                },
+                {
+                    dataId: 'crosshairBorderThickness',
+                    label: 'Border thickness of lines in crosshair (px)',
+                    validationInfo: 'Greater than or equal to 0. Integer',
+                    validate: integerGreaterThanOrEqualToZero,
+                    parse: parseInt,
+                    group: 'crosshair'
                 },
                 {
                     dataId: 'targetDistance',
