@@ -11,8 +11,8 @@ const World = function(settings, collisionDetection) {
 	this.targetSystem = null;
 }
 
-World.prototype.adjustTimers = function() {
-    this.targetSystem.adjustTimers();
+World.prototype.adjustTimers = function(time) {
+    this.targetSystem.adjustTimers(time);
 };
 
 World.prototype.create = function() {
