@@ -181,8 +181,16 @@ const SettingsPage = function(settings, onDone) {
                     group: 'environment'
                 },
                 {
-                    dataId: 'targetWallScreenRatio',
-                    label: 'Target Wall Screen Ratio',
+                    dataId: 'targetWallWidth',
+                    label: 'Target Wall Width (cm)',
+                    validationInfo: 'Greater than 0.',
+                    validate: greaterThanZero,
+                    parse: parseFloat,
+                    group: 'environment'
+                },
+                {
+                    dataId: 'targetWallHeight',
+                    label: 'Target Wall Height (cm)',
                     validationInfo: 'Greater than 0.',
                     validate: greaterThanZero,
                     parse: parseFloat,

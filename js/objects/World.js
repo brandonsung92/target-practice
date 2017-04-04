@@ -27,7 +27,7 @@ World.prototype.createScene = function() {
 
     let sceneLength = this.getSceneLength();
     let sceneWidth = this.getSceneWidth();
-    let sceneHeight = this.getSceneHeight(sceneWidth);
+    let sceneHeight = this.getSceneHeight();
 
     let {movespeed, elevation} = this.settings;
 
@@ -148,16 +148,11 @@ World.prototype.getSceneLength = function() {
 };
 
 World.prototype.getSceneWidth = function() {
-    let {hfov, targetWallScreenRatio, targetDistance} = this.settings;
-
-    let halfFovRad = hfov * Math.PI / 360;
-    return Math.abs(Math.tan(halfFovRad) * targetDistance * 2 * targetWallScreenRatio);
+    return this.settings.targetWallWidth;
 };
 
-World.prototype.getSceneHeight = function(sceneWidth) {
-    let {gameHeight, gameWidth} = this.settings;
-    sceneWidth = sceneWidth || this.getSceneWidth();
-    return Math.abs(sceneWidth * (gameHeight / gameWidth));
+World.prototype.getSceneHeight = function() {
+    return this.settings.targetWallHeight;
 };
 
 module.exports = World;
